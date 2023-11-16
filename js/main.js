@@ -70,6 +70,8 @@ function wrangleData(charactersData, episodesData, topN) {
                 const sceneDuration = endSec - startSec;
 
                 character.timePeriods.push({
+                    seasonNum: episode.seasonNum,
+                    episodeNum: episode.episodeNum,
                     sceneStart: scene.sceneStart,
                     sceneEnd: scene.sceneEnd,
                     duration: sceneDuration
@@ -90,10 +92,67 @@ function wrangleData(charactersData, episodesData, topN) {
     return characterArray.slice(0, topN);
 }
 
+function calculateSharedTime(character1, character2) {
+    let sharedTime = 0;
+    character1.timePeriods.forEach(period1 => {
+        character2.timePeriods.forEach(period2 => {
+            if (period1.sceneStart === period2.sceneStart &&
+                period1.sceneEnd === period2.sceneEnd &&
+                period1.seasonNum === period2.seasonNum &&
+                period1.episodeNum === period2.episodeNum) {
+                sharedTime += period1.duration;
+            }
+        });
+    });
+    return sharedTime;
+}
+
+function createSharedScreenTimeMatrix(processedData, topN) {
+    // Initialize the matrix with zeros
+    let matrix = Array.from({ length: topN }, () => Array(topN).fill(0));
+
+    // Calculate shared screen time
+    for (let i = 0; i < topN; i++) {
+        for (let j = i; j < topN; j++) {
+            if (i === j) {
+                // Diagonal element: total screen time of the character
+                matrix[i][j] = processedData[i].totalScreenTime;
+            } else {
+                // Shared screen time between character i and j
+                let sharedTime = calculateSharedTime(processedData[i], processedData[j]);
+                matrix[i][j] = matrix[j][i] = sharedTime;
+            }
+        }
+    }
+    return matrix;
+}
+
+function createSharedScreenTimeMatrixCustomize(characterArray) {
+    let n = characterArray.length; // The size of the matrix is based on the input array length
+    let matrix = Array.from({ length: n }, () => Array(n).fill(0));
+
+    // Calculate shared screen time
+    for (let i = 0; i < n; i++) {
+        for (let j = i; j < n; j++) {
+            if (i === j) {
+                // Diagonal element: total screen time of the character
+                matrix[i][j] = characterArray[i].totalScreenTime;
+            } else {
+                // Shared screen time between character i and j
+                let sharedTime = calculateSharedTime(characterArray[i], characterArray[j]);
+                matrix[i][j] = matrix[j][i] = sharedTime;
+            }
+        }
+    }
+    return matrix;
+}
+
 let topN = 30;
 let processedData;
+let matrix;
 loadData().then(data => {
     processedData = wrangleData(data.charactersData, data.episodesData, topN);
+    matrix = createSharedScreenTimeMatrix(processedData, topN);
 }).catch(error => {
     console.error('Error processing data:', error.message);
 });
