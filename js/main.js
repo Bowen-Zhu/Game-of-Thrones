@@ -6,6 +6,7 @@ async function loadData() {
     try {
         const charactersResponse = await fetch('data/characters.json');
         const episodesResponse = await fetch('data/episodes.json');
+        const groupsResponse = await fetch('data/characters-groups.json');
 
         if (!charactersResponse.ok || !episodesResponse.ok) {
             throw new Error('Network response was not ok.');
@@ -13,10 +14,12 @@ async function loadData() {
 
         const charactersData = await charactersResponse.json();
         const episodesData = await episodesResponse.json();
+        const groupsData = await groupsResponse.json();
 
         return {
             charactersData: charactersData,
-            episodesData: episodesData
+            episodesData: episodesData,
+            groupsData: groupsData
         };
     } catch (error) {
         console.error('Error:', error.message);
@@ -32,7 +35,7 @@ function sec(timeString){
     return sec;
 }
 
-function wrangleData(charactersData, episodesData, topN) {
+function wrangleData(charactersData, episodesData, groupsData, topN) {
     // Parse JSON Data
     const characters = charactersData.characters;
     const episodes = episodesData.episodes;
@@ -82,6 +85,24 @@ function wrangleData(charactersData, episodesData, topN) {
         });
     });
 
+    // Create a map for character to group
+    let characterGroupMap = {};
+    groupsData.groups.forEach(group => {
+        group.characters.forEach(characterName => {
+            if (characterGroupMap[characterName]) {
+                // If the character is already in the map, it's a duplicate
+                console.warn(`Duplicate group entry found for character: ${characterName}`);
+            } else {
+                characterGroupMap[characterName] = group.name;
+            }
+        });
+    });
+
+    // Add group info to characters (not exactly the houses)
+    characters.forEach(character => {
+        charactersMap[character.characterName].group = characterGroupMap[character.characterName] || 'none';
+    });
+
     // Convert the Map to an Array
     let characterArray = Object.values(charactersMap);
 
@@ -90,6 +111,26 @@ function wrangleData(charactersData, episodesData, topN) {
 
     // Slice the Top N Characters
     return characterArray.slice(0, topN);
+}
+
+function sortCharactersByGroup(processedData, groupsData) {
+    // List of groups in the desired order
+    const groupOrder = groupsData.groups.map(group => group.name);
+
+    let groupedData = [...processedData];
+    // Sort function
+    groupedData.sort((a, b) => {
+        let groupA = groupOrder.indexOf(a.group);
+        let groupB = groupOrder.indexOf(b.group);
+
+        // Handle characters not in any group
+        if (groupA === -1) groupA = Infinity;
+        if (groupB === -1) groupB = Infinity;
+
+        return groupA - groupB || b.totalScreenTime - a.totalScreenTime; // If same group, sort by screentime
+    });
+
+    return groupedData;
 }
 
 function calculateSharedTime(character1, character2) {
@@ -150,9 +191,14 @@ function createSharedScreenTimeMatrixCustomize(characterArray) {
 let topN = 30;
 let processedData;
 let matrix;
+let groupedData;
+let groupedMatrix;
 loadData().then(data => {
-    processedData = wrangleData(data.charactersData, data.episodesData, topN);
+    processedData = wrangleData(data.charactersData, data.episodesData, data.groupsData, topN);
     matrix = createSharedScreenTimeMatrix(processedData, topN);
+
+    groupedData = sortCharactersByGroup(processedData, data.groupsData);
+    groupedMatrix = createSharedScreenTimeMatrixCustomize(groupedData);
 }).catch(error => {
     console.error('Error processing data:', error.message);
 });
