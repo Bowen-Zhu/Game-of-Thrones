@@ -34,3 +34,49 @@
     font-size: 14px;
     color: white;
 }
+
+.title {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 36px;
+    color: #C41E3A;
+}
+
+.plot-title {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 24px;
+    color: #483D8B;
+}
+
+.scatterplot-buttons {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.scatterplot-buttons button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #483D8B;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.scatterplot-buttons button:hover {
+    background-color: #36508B;
+}
+
+.scatterplots-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#scatterplot1, #scatterplot2 {
+    flex: 1;
+}
