@@ -25,14 +25,39 @@
     <div class="row">
         <h2 class="plot-title">Storyline</h2>
         <div id="storyline"></div>
+        <div class="plot-description">
+            A visualization of when each character is on screen throughout the entire show.
+        </div>
     </div>
     <div class="row">
         <h2 class="plot-title">Relationship Matrix</h2>
-        <div id="matrix"></div>
+        <div id="matrix">
+            <div class="plot-filter-top-right">
+                <select id="filterPlot2">
+                    <option value="option1">Allegiance 1</option>
+                    <option value="option2">Allegiance 2</option>
+                    <option value="option3">Allegiance 3</option>
+                </select>
+            </div>
+        </div>
     </div>
     <div class="row">
+        <div class="plot-description">
+            Users can switch between the relationship matrix and relationship network by scrolling left and right.<br>
+            Clicking on the matrix would highlight relationships in the force visualization.<br>
+            The characters can be filtered by allegiances.
+        </div>
         <h2 class="plot-title">Relationship Network</h2>
-        <div id="network"></div>
+        <div id="network">
+            <div class="plot-filter-top-right">
+                <select id="filterPlot3">
+                    <option value="option1">Allegiance 1</option>
+                    <option value="option2">Allegiance 2</option>
+                    <option value="option3">Allegiance 3</option>
+                </select>
+            </div>
+        </div>
+    </div>
     </div>
     <!-- Placeholders -->
     <h2 class="plot-title">Correlation between the survival rate and ...</h2>
@@ -42,9 +67,17 @@
         <button id="button3">gender</button>
     </div>
     <div class="scatterplots-container">
-        <div id="scatterplot1"></div>
-        <div id="scatterplot2"></div>
+        <div class="scatterplot">
+            <div id="scatterplot1"></div>
+        </div>
+        <div class="scatterplot">
+            <div id="scatterplot2"></div>
+<!--            <p class="plot-description">Descriptions for Scatterplot...</p>-->
+        </div>
     </div>
+    <p class="plot-description">
+        A series of regressions to show the correlation between the survival rate and some specific variables, such as allegiance, nobility status, gender...
+    </p>
 </div>
 <!--<div class="container">-->
 <!--    <div id="firstPage" class="page">-->
