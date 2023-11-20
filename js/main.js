@@ -21,6 +21,7 @@ async function loadData() {
             episodesData: episodesData,
             groupsData: groupsData
         };
+
     } catch (error) {
         console.error('Error:', error.message);
     }
@@ -193,12 +194,23 @@ let processedData;
 let matrix;
 let groupedData;
 let groupedMatrix;
+
 loadData().then(data => {
     processedData = wrangleData(data.charactersData, data.episodesData, data.groupsData, topN);
     matrix = createSharedScreenTimeMatrix(processedData, topN);
 
     groupedData = sortCharactersByGroup(processedData, data.groupsData);
     groupedMatrix = createSharedScreenTimeMatrixCustomize(groupedData);
+
+    const characterNames = processedData.map(character => character.characterName);
+
+    const storyline = new Storyline("storyline", processedData);
+
+    const relationshipMatrix = new RelationshipMatrix(matrix, "matrix", topN, characterNames);
+
+
 }).catch(error => {
     console.error('Error processing data:', error.message);
 });
+
+
