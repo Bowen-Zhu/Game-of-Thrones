@@ -66,7 +66,7 @@ class RelationshipMatrix {
             .domain(vis.characterNames)
             .padding(0.1);
 
-        const cellSize = vis.xScale.bandwidth();
+        const cellSize = vis.yScale.bandwidth();
 
         // Column labels
         vis.svg.append("g")
@@ -159,7 +159,7 @@ class RelationshipMatrix {
             .attr("stop-color", d => d.color);
 
         // Legend bar dimensions
-        const legendWidth = vis.width - vis.margin.left;
+        const legendWidth = 300;
         const legendHeight = 30;
 
         // Append the legend bar
