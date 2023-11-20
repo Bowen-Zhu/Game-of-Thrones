@@ -167,7 +167,7 @@ class RelationshipMatrix {
             .attr("width", legendWidth)
             .attr("height", legendHeight)
             .style("fill", "url(#gradient)")
-            .attr("transform", `translate(0,${vis.height-50})`);
+            .attr("transform", `translate(0,${vis.height})`);
 
         // Define a scale and axis for the legend
         let legendScale = d3.scaleLinear()
@@ -180,7 +180,7 @@ class RelationshipMatrix {
         // Append the legend axis
         vis.svg.append("g")
             .attr("class", "legend-axis")
-            .attr("transform", `translate(0, ${vis.height-50})`)
+            .attr("transform", `translate(0, ${vis.height})`)
             .call(legendAxis);
     }
 

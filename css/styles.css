@@ -1,13 +1,27 @@
-#storyline {
-    height: 700px;
-    width: 3000px;
-}
-#matrix{
-    height: 1000px;
-    width: 1000px;
+.row {
+    padding-bottom: 3rem;
 }
 
-.matrix-tooltip, .storyline-tooltip {
+.container {
+    padding-top: 3rem;
+}
+
+#storyline {
+    height: 90vh;
+    width: 90vw;
+}
+
+#matrix{
+    height: 90vh;
+    width: 90vw;
+}
+
+#network{
+    height: 90vh;
+    width: 90vw;
+}
+
+.matrix-tooltip, .storyline-tooltip, .network-tooltip {
     position: absolute;
     text-align: center;
     width: auto;

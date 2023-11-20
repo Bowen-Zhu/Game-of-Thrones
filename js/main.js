@@ -208,6 +208,8 @@ loadData().then(data => {
 
     const relationshipMatrix = new RelationshipMatrix(matrix, "matrix", topN, characterNames);
 
+    const relationshipNetwork = new RelationshipNetwork("network", processedData, matrix, groupedData);
+
 
 }).catch(error => {
     console.error('Error processing data:', error.message);
