@@ -1,15 +1,12 @@
 class RelationshipNetwork {
-    constructor(parentElement, data, sharedScreenTime, groupedCharacter) {
+    constructor(parentElement, data, sharedScreenTime, groupedCharacter, selectedNodesSubmit) {
         this.parentElement = parentElement;
         this.data = data;
         this.sharedScreenTime = sharedScreenTime;
         this.groupedCharacter = groupedCharacter;
         this.matrix = {"nodes":[], "links":[]};
-
-        // Create tooltip
-        this.tooltip = d3.select("body").append("div")
-            .attr("class", "network-tooltip")
-            .style("opacity", 0);
+        this.selectedNodes = [];
+        this.selectedNodesSubmit = selectedNodesSubmit;
 
         this.processData();
         this.renderNetwork();
@@ -17,9 +14,9 @@ class RelationshipNetwork {
 
     processData() {
         let vis = this;
-        console.log("Processed Data:", vis.data);
-        console.log("Shared Screen Time:", vis.sharedScreenTime);
-        console.log("Grouped Characters:", vis.groupedCharacter);
+        // console.log("Processed Data in network.js:", vis.data);
+        // console.log("Shared Screen Time in network.js:", vis.sharedScreenTime);
+        // console.log("Grouped Characters in network.js:", vis.groupedCharacter);
 
         // Process nodes
         vis.data.forEach((d, i) => {
@@ -66,6 +63,11 @@ class RelationshipNetwork {
 
         vis.color = d3.scaleOrdinal(d3.schemeCategory10);
 
+        // Create tooltip
+        this.tooltip = d3.select("body").append("div")
+            .attr("class", "network-tooltip")
+            .style("opacity", 0);
+
         // Create links
         let link = vis.svg.append("g")
             .attr("class", "links")
@@ -97,6 +99,9 @@ class RelationshipNetwork {
             .on("mouseout", function (event, d) {
                 vis.tooltip
                     .style("opacity", 0);
+            })
+            .on("click", function (event, d) {
+                vis.handleNodeClick(d);
             });
 
         // console.log(vis.matrix.nodes.map(d => d.group));
@@ -148,12 +153,9 @@ class RelationshipNetwork {
 
         node.call(drag(vis.simulation));
 
-        vis.createLegend();
-    }
 
-    createLegend() {
-        let vis = this;
 
+        // Create legend
         const legendMargin = { top: 10, right: 5, bottom: 10, left: 5 };
         const legendRectSize = 18;
         const legendSpacing = 20;
@@ -189,6 +191,21 @@ class RelationshipNetwork {
                 .style("text-anchor", "start")
                 .text(group);
         });
+    }
+
+
+    handleNodeClick(nodeData) {
+        let vis = this;
+        if (!vis.selectedNodes.find(d => d.id === nodeData.id)) {
+            vis.selectedNodes.push(nodeData);
+            console.log("Selected Nodes in network.js:", vis.selectedNodes);
+        }
+    }
+
+    submitSelectedNodes() {
+        if (this.selectedNodesSubmit && typeof this.selectedNodesSubmit === "function") {
+            this.selectedNodesSubmit(this.selectedNodes);
+        }
     }
 
 }

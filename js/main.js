@@ -203,17 +203,20 @@ loadData().then(data => {
     groupedMatrix = createSharedScreenTimeMatrixCustomize(groupedData);
 
     const characterNames = processedData.map(character => character.characterName);
-
     const storyline = new Storyline("storyline", processedData);
-
     const relationshipMatrix = new RelationshipMatrix(matrix, "matrix", topN, characterNames);
+    const relationshipNetwork = new RelationshipNetwork("network", processedData, matrix, groupedData, function(selectedNodes) {
+        console.log('Submitted Nodes in main.js:', selectedNodes);
+    });
 
-    const relationshipNetwork = new RelationshipNetwork("network", processedData, matrix, groupedData);
-
-
+    document.getElementById('select-node').addEventListener('click', function() {
+        relationshipNetwork.submitSelectedNodes();
+    });
 }).catch(error => {
     console.error('Error processing data:', error.message);
 });
+
+
 
 
 // Test transition
