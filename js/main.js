@@ -189,7 +189,7 @@ function createSharedScreenTimeMatrixCustomize(characterArray) {
     return matrix;
 }
 
-let topN = 30;
+let topN = 50;
 let processedData;
 let matrix;
 let groupedData;

@@ -4,8 +4,6 @@ class RelationshipNetwork {
         this.data = data;
         this.sharedScreenTime = sharedScreenTime;
         this.groupedCharacter = groupedCharacter;
-        this.nodes = [];
-        this.links = [];
         this.selectedNodes = [];
         this.selectedNodesSubmit = selectedNodesSubmit;
 
@@ -14,37 +12,50 @@ class RelationshipNetwork {
 
     wrangleData() {
         let vis = this;
-        console.log("Processed Data in network.js:", vis.data);
+        // console.log("Processed Data in network.js:", vis.data);
         // console.log("Shared Screen Time in network.js:", vis.sharedScreenTime);
         // console.log("Grouped Characters in network.js:", vis.groupedCharacter);
+
+        this.nodes = [];
+        this.links = [];
 
         // Process nodes
         vis.data.forEach((d, i) => {
             vis.nodes.push({
-                "name": d.characterName,
-                "group": d.group,
+                ...d,
                 "id": i
             });
         });
 
         // Process links
-        vis.sharedScreenTime.forEach((row, i) => {
-            row.forEach((value, j) => {
-                if (value > 0 && i !== j) {
-                    vis.links.push({
-                        "source": i,
-                        "target": j,
-                        "value": value
-                    });
-                }
+        vis.nodes.forEach((node, i) => {
+            vis.data.forEach((d) => {
+                ["killed", "marriedEngaged", "guardianOf", "guardedBy", "killedBy", "parents", "parentOf", "serves", "servedBy", "siblings"].forEach((relation) => {
+                    if (d[relation] && d[relation].includes(node.characterName)) {
+                        let targetNode = vis.nodes.find(n => n.characterName === d.characterName);
+                        if (targetNode) {
+                            vis.links.push({
+                                "source": node.id,
+                                "target": targetNode.id,
+                            });
+                        }
+                    }
+                });
             });
         });
 
         // Count links for each node
         vis.linkCount = new Array(vis.nodes.length).fill(0);
+        let countedLinks = new Set();
+
         vis.links.forEach(link => {
-            vis.linkCount[link.source]++;
-            vis.linkCount[link.target]++;
+            let linkId = link.source < link.target ? `${link.source}-${link.target}` : `${link.target}-${link.source}`;
+
+            if (!countedLinks.has(linkId)) {
+                vis.linkCount[link.source]++;
+                vis.linkCount[link.target]++;
+                countedLinks.add(linkId);
+            }
         });
 
         this.initVis();
@@ -74,9 +85,11 @@ class RelationshipNetwork {
 
         // Initialize force simulation
         vis.simulation = d3.forceSimulation()
-            .force("link", d3.forceLink().id(d => d.id).distance(350).strength(0.03))
-            .force("charge", d3.forceManyBody().strength(-50))
+            .force("link", d3.forceLink().id(d => d.id).distance(100).strength(0.5))
+            .force("charge", d3.forceManyBody().strength(-20))
             .force("center", d3.forceCenter(vis.width / 2, vis.height / 2));
+
+        vis.simulation.stop();
 
         vis.updateVis();
     }
@@ -84,7 +97,7 @@ class RelationshipNetwork {
     updateVis() {
         let vis = this;
 
-        // Create links - not working
+        // Create links
         let link = vis.svg.selectAll(".links")
             .data(vis.links, d => d.source.id + "-" + d.target.id);
 
@@ -97,7 +110,7 @@ class RelationshipNetwork {
 
         link.exit().remove();
 
-        // Create nodes - not working
+        // Create nodes
         let node = vis.svg.selectAll(".nodes")
             .data(vis.nodes, d => d.id);
 
@@ -110,7 +123,11 @@ class RelationshipNetwork {
                 vis.tooltip.transition()
                     .duration(200)
                     .style("opacity", 0.9);
-                let tooltipContent = `Name: <b>${d.name}</b><br/>Group: <b>${d.group}</b><br/>Link Count: <b>${vis.linkCount[d.id]}</b>`;
+                let tooltipContent = `
+                Name: <b>${d.characterName}</b><br/>
+                Group: <b>${d.group}</b><br/>
+                Count: <b>${vis.linkCount[d.id]}</b>
+                `;
                 vis.tooltip.html(tooltipContent)
                     .style("left", (event.pageX) + "px")
                     .style("top", (event.pageY - 28) + "px");
@@ -120,6 +137,10 @@ class RelationshipNetwork {
                     .style("opacity", 0);
             })
             .on("click", function (event, d) {
+                d.isSelected = !d.isSelected;
+                d3.select(this)
+                    .attr("stroke", d.isSelected ? "black" : "none")
+                    .attr("stroke-width", d.isSelected ? 2 : 0);
                 vis.handleNodeClick(d);
             });
 
@@ -139,56 +160,27 @@ class RelationshipNetwork {
                 .attr("x2", d => d.target.x)
                 .attr("y2", d => d.target.y);
         }
-
-        vis.simulation.alpha(1).restart();
-
-
-
-        // Create legend
-        const legendMargin = { top: 10, right: 5, bottom: 10, left: 5 };
-        const legendRectSize = 18;
-        const legendSpacing = 20;
-
-        const groups = [...new Set(vis.nodes.map(d => d.group))];
-        vis.groupColors = d3.scaleOrdinal(d3.schemeCategory10)
-            .domain(groups);
-
-        // Create legend SVG group
-        const legendSvg = vis.svg.append("g")
-            .attr("class", "legend")
-            .attr("transform", `translate(${vis.width - 150}, ${legendMargin.top})`);
-
-        // Create legend
-        groups.forEach((group, index) => {
-            const legendItem = legendSvg.append("g")
-                .attr("class", "legend-item")
-                .attr("transform", `translate(0, ${index * legendSpacing})`);
-
-            // Draw rectangle
-            legendItem.append("rect")
-                .attr("x", 0)
-                .attr("y", 0)
-                .attr("width", legendRectSize)
-                .attr("height", legendRectSize)
-                .style("fill", vis.groupColors(group));
-
-            // Add label
-            legendItem.append("text")
-                .attr("x", legendRectSize + 5)
-                .attr("y", legendRectSize / 2)
-                .attr("dy", ".35em")
-                .style("text-anchor", "start")
-                .text(group);
-        });
     }
 
     handleNodeClick(node) {
         let vis = this;
-        let matchedData = vis.data.find(d => d.characterName === node.name);
-        if (matchedData && !vis.selectedNodes.find(d => d.characterName === matchedData.characterName)) {
-            vis.selectedNodes.push(matchedData);
-            console.log("Selected Nodes in network.js:", vis.selectedNodes);
+        let matchedData = vis.data.find(d => d.characterName === node.characterName);
+
+        if (node.isSelected) {
+            if (matchedData && !vis.selectedNodes.find(d => d.characterName === matchedData.characterName)) {
+                vis.selectedNodes.push(matchedData);
+            }
+        } else {
+            vis.selectedNodes = vis.selectedNodes.filter(d => d.characterName !== matchedData.characterName);
         }
+        console.log("Selected Nodes in network.js:", vis.selectedNodes);
+
+        let connectedLinks = vis.links.filter(link => {
+            let sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+            let targetId = typeof link.target === 'object' ? link.target.id : link.target;
+            return sourceId === node.id || targetId === node.id;
+        });
+        // console.log("Links connected to " + node.name + ":", connectedLinks);
     }
 
     submitSelectedNodes() {
@@ -196,8 +188,13 @@ class RelationshipNetwork {
         if (this.selectedNodesSubmit && typeof this.selectedNodesSubmit === "function") {
             this.selectedNodesSubmit(this.selectedNodes);
             vis.data = vis.selectedNodes;
-            console.log("Submitted Nodes in network.js:", vis.data);
-            // vis.wrangleData(vis.data);
+            // console.log("Submitted Nodes in network.js:", vis.data);
+
+            vis.nodes.forEach(node => {
+                node.isSelected = false;
+            });
+
+            vis.wrangleData();
         }
     }
 
