@@ -6,7 +6,6 @@ class RelationshipNetwork {
         this.groupedCharacter = groupedCharacter;
         this.nodes = [];
         this.links = [];
-        // this.matrix = {"nodes":[], "links":[]};
         this.selectedNodes = [];
         this.selectedNodesSubmit = selectedNodesSubmit;
 
@@ -15,14 +14,13 @@ class RelationshipNetwork {
 
     wrangleData() {
         let vis = this;
-        // console.log("Processed Data in network.js:", vis.data);
+        console.log("Processed Data in network.js:", vis.data);
         // console.log("Shared Screen Time in network.js:", vis.sharedScreenTime);
         // console.log("Grouped Characters in network.js:", vis.groupedCharacter);
 
         // Process nodes
         vis.data.forEach((d, i) => {
             vis.nodes.push({
-                ...d,
                 "name": d.characterName,
                 "group": d.group,
                 "id": i
@@ -79,7 +77,6 @@ class RelationshipNetwork {
             .force("link", d3.forceLink().id(d => d.id).distance(350).strength(0.03))
             .force("charge", d3.forceManyBody().strength(-50))
             .force("center", d3.forceCenter(vis.width / 2, vis.height / 2));
-        vis.simulation.stop();
 
         vis.updateVis();
     }
@@ -87,18 +84,26 @@ class RelationshipNetwork {
     updateVis() {
         let vis = this;
 
-        // Create links
+        // Create links - not working
         let link = vis.svg.selectAll(".links")
-            .attr("class", "links")
-            .data(vis.links)
+            .data(vis.links, d => d.source.id + "-" + d.target.id);
+
+        link = link
             .enter().append("line")
+            .attr("class", "links")
+            .merge(link)
             .attr("stroke-width", 1)
             .attr("stroke", "lightGray");
 
+        link.exit().remove();
+
+        // Create nodes - not working
         let node = vis.svg.selectAll(".nodes")
-            .attr("class", "nodes")
-            .data(vis.nodes)
+            .data(vis.nodes, d => d.id);
+
+        node = node
             .enter().append("circle")
+            .merge(node)
             .attr("r", d => 3 * Math.sqrt(vis.linkCount[d.id]))
             .attr("fill", d => vis.color(d.group))
             .on("mouseover", function (event, d) {
@@ -118,19 +123,22 @@ class RelationshipNetwork {
                 vis.handleNodeClick(d);
             });
 
-        // Update simulation
-        vis.simulation.nodes(vis.nodes)
-            .on("tick", () => {
-                link.attr("x1", d => d.source.x)
-                    .attr("y1", d => d.source.y)
-                    .attr("x2", d => d.target.x)
-                    .attr("y2", d => d.target.y);
-                node.attr("cx", d => d.x)
-                    .attr("cy", d => d.y);
-            });
+        node.exit().remove();
 
-        vis.simulation.force("link")
-            .links(vis.links);
+        // Update simulation
+        vis.simulation.nodes(vis.nodes).on("tick", ticked);
+        vis.simulation.force("link").links(vis.links);
+        vis.simulation.alpha(1).restart();
+
+        function ticked() {
+            node.attr("cx", d => d.x)
+                .attr("cy", d => d.y);
+
+            link.attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
+        }
 
         vis.simulation.alpha(1).restart();
 
@@ -174,10 +182,11 @@ class RelationshipNetwork {
         });
     }
 
-    handleNodeClick(nodeData) {
+    handleNodeClick(node) {
         let vis = this;
-        if (!vis.selectedNodes.find(d => d.id === nodeData.id)) {
-            vis.selectedNodes.push(nodeData);
+        let matchedData = vis.data.find(d => d.characterName === node.name);
+        if (matchedData && !vis.selectedNodes.find(d => d.characterName === matchedData.characterName)) {
+            vis.selectedNodes.push(matchedData);
             console.log("Selected Nodes in network.js:", vis.selectedNodes);
         }
     }
@@ -186,8 +195,9 @@ class RelationshipNetwork {
         let vis = this;
         if (this.selectedNodesSubmit && typeof this.selectedNodesSubmit === "function") {
             this.selectedNodesSubmit(this.selectedNodes);
-            vis.selectedNodes = vis.data;
-            // vis.wrangleData();
+            vis.data = vis.selectedNodes;
+            console.log("Submitted Nodes in network.js:", vis.data);
+            // vis.wrangleData(vis.data);
         }
     }
 
