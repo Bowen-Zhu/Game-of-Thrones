@@ -61,6 +61,7 @@ class RelationshipNetwork {
         this.initVis();
     }
 
+
     initVis() {
         let vis = this;
 
@@ -70,10 +71,14 @@ class RelationshipNetwork {
 
         // Create SVG area
         vis.svg = d3.select("#" + vis.parentElement).append("svg")
-            .attr("height", vis.height + vis.margin.top + vis.margin.bottom)
             .attr("width", vis.width + vis.margin.left + vis.margin.right)
+            .attr("height", vis.height + vis.margin.top + vis.margin.bottom)
             .append("g")
-            .attr("transform", `translate(${vis.margin.left}, ${vis.margin.top})`);
+            .attr("transform", `translate(${vis.width / 2}, ${vis.height / 2})`);
+
+        // Create groups
+        vis.link = vis.svg.append("g").attr("class", "links");
+        vis.node = vis.svg.append("g").attr("class", "nodes");
 
         // Define color scale
         vis.color = d3.scaleOrdinal(d3.schemeCategory10);
@@ -86,10 +91,9 @@ class RelationshipNetwork {
         // Initialize force simulation
         vis.simulation = d3.forceSimulation()
             .force("link", d3.forceLink().id(d => d.id).distance(100).strength(0.5))
-            .force("charge", d3.forceManyBody().strength(-20))
-            .force("center", d3.forceCenter(vis.width / 2, vis.height / 2));
-
-        vis.simulation.stop();
+            .force("charge", d3.forceManyBody().strength(-10))
+            .force("center", d3.forceCenter(0, 0))
+            .on("tick", () => vis.ticked());
 
         vis.updateVis();
     }
@@ -97,27 +101,20 @@ class RelationshipNetwork {
     updateVis() {
         let vis = this;
 
-        // Create links
-        let link = vis.svg.selectAll(".links")
+        // Update links
+        vis.link = vis.link.selectAll(".link")
             .data(vis.links, d => d.source.id + "-" + d.target.id);
+        vis.link.exit().remove();
+        vis.link = vis.link.enter().append("line").merge(vis.link)
+            .attr("stroke", "lightGray")
+            .attr("stroke-width", 1);
 
-        link = link
-            .enter().append("line")
-            .attr("class", "links")
-            .merge(link)
-            .attr("stroke-width", 1)
-            .attr("stroke", "lightGray");
-
-        link.exit().remove();
-
-        // Create nodes
-        let node = vis.svg.selectAll(".nodes")
+        // Update nodes
+        vis.node = vis.node.selectAll(".node")
             .data(vis.nodes, d => d.id);
-
-        node = node
-            .enter().append("circle")
-            .merge(node)
-            .attr("r", d => 3 * Math.sqrt(vis.linkCount[d.id]))
+        vis.node.exit().remove();
+        vis.node = vis.node.enter().append("circle").merge(vis.node)
+            .attr("r", 8)
             .attr("fill", d => vis.color(d.group))
             .on("mouseover", function (event, d) {
                 vis.tooltip.transition()
@@ -144,22 +141,22 @@ class RelationshipNetwork {
                 vis.handleNodeClick(d);
             });
 
-        node.exit().remove();
-
-        // Update simulation
-        vis.simulation.nodes(vis.nodes).on("tick", ticked);
+        // Update graph
+        vis.simulation.nodes(vis.nodes);
         vis.simulation.force("link").links(vis.links);
         vis.simulation.alpha(1).restart();
+    }
 
-        function ticked() {
-            node.attr("cx", d => d.x)
-                .attr("cy", d => d.y);
+    ticked() {
+        let vis = this;
 
-            link.attr("x1", d => d.source.x)
-                .attr("y1", d => d.source.y)
-                .attr("x2", d => d.target.x)
-                .attr("y2", d => d.target.y);
-        }
+        vis.node.attr("cx", d => d.x)
+            .attr("cy", d => d.y);
+
+        vis.link.attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y);
     }
 
     handleNodeClick(node) {
@@ -175,12 +172,14 @@ class RelationshipNetwork {
         }
         console.log("Selected Nodes in network.js:", vis.selectedNodes);
 
+        /*
         let connectedLinks = vis.links.filter(link => {
             let sourceId = typeof link.source === 'object' ? link.source.id : link.source;
             let targetId = typeof link.target === 'object' ? link.target.id : link.target;
             return sourceId === node.id || targetId === node.id;
         });
-        // console.log("Links connected to " + node.name + ":", connectedLinks);
+        console.log("Links connected to " + node.name + ":", connectedLinks);
+         */
     }
 
     submitSelectedNodes() {
