@@ -23,7 +23,6 @@
 
 .matrix-tooltip, .storyline-tooltip, .network-tooltip {
     position: absolute;
-    text-align: center;
     width: auto;
     height: auto;
     padding: 12px;

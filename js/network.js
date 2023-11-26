@@ -4,15 +4,16 @@ class RelationshipNetwork {
         this.data = data;
         this.sharedScreenTime = sharedScreenTime;
         this.groupedCharacter = groupedCharacter;
-        this.matrix = {"nodes":[], "links":[]};
+        this.nodes = [];
+        this.links = [];
+        // this.matrix = {"nodes":[], "links":[]};
         this.selectedNodes = [];
         this.selectedNodesSubmit = selectedNodesSubmit;
 
-        this.processData();
-        this.renderNetwork();
+        this.wrangleData();
     }
 
-    processData() {
+    wrangleData() {
         let vis = this;
         // console.log("Processed Data in network.js:", vis.data);
         // console.log("Shared Screen Time in network.js:", vis.sharedScreenTime);
@@ -20,7 +21,8 @@ class RelationshipNetwork {
 
         // Process nodes
         vis.data.forEach((d, i) => {
-            vis.matrix.nodes.push({
+            vis.nodes.push({
+                ...d,
                 "name": d.characterName,
                 "group": d.group,
                 "id": i
@@ -31,7 +33,7 @@ class RelationshipNetwork {
         vis.sharedScreenTime.forEach((row, i) => {
             row.forEach((value, j) => {
                 if (value > 0 && i !== j) {
-                    vis.matrix.links.push({
+                    vis.links.push({
                         "source": i,
                         "target": j,
                         "value": value
@@ -41,26 +43,30 @@ class RelationshipNetwork {
         });
 
         // Count links for each node
-        vis.linkCount = new Array(vis.matrix.nodes.length).fill(0);
-        vis.matrix.links.forEach(link => {
+        vis.linkCount = new Array(vis.nodes.length).fill(0);
+        vis.links.forEach(link => {
             vis.linkCount[link.source]++;
             vis.linkCount[link.target]++;
         });
+
+        this.initVis();
     }
 
-    renderNetwork() {
+    initVis() {
         let vis = this;
 
         vis.margin = {top: 50, right: 50, bottom: 50, left: 50};
         vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
         vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.bottom - vis.margin.top;
 
+        // Create SVG area
         vis.svg = d3.select("#" + vis.parentElement).append("svg")
             .attr("height", vis.height + vis.margin.top + vis.margin.bottom)
             .attr("width", vis.width + vis.margin.left + vis.margin.right)
             .append("g")
             .attr("transform", `translate(${vis.margin.left}, ${vis.margin.top})`);
 
+        // Define color scale
         vis.color = d3.scaleOrdinal(d3.schemeCategory10);
 
         // Create tooltip
@@ -68,20 +74,30 @@ class RelationshipNetwork {
             .attr("class", "network-tooltip")
             .style("opacity", 0);
 
+        // Initialize force simulation
+        vis.simulation = d3.forceSimulation()
+            .force("link", d3.forceLink().id(d => d.id).distance(350).strength(0.03))
+            .force("charge", d3.forceManyBody().strength(-50))
+            .force("center", d3.forceCenter(vis.width / 2, vis.height / 2));
+        vis.simulation.stop();
+
+        vis.updateVis();
+    }
+
+    updateVis() {
+        let vis = this;
+
         // Create links
-        let link = vis.svg.append("g")
+        let link = vis.svg.selectAll(".links")
             .attr("class", "links")
-            .selectAll("line")
-            .data(vis.matrix.links)
+            .data(vis.links)
             .enter().append("line")
             .attr("stroke-width", 1)
             .attr("stroke", "lightGray");
 
-        // Create nodes
-        let node = vis.svg.append("g")
+        let node = vis.svg.selectAll(".nodes")
             .attr("class", "nodes")
-            .selectAll("circle")
-            .data(vis.matrix.nodes)
+            .data(vis.nodes)
             .enter().append("circle")
             .attr("r", d => 3 * Math.sqrt(vis.linkCount[d.id]))
             .attr("fill", d => vis.color(d.group))
@@ -89,9 +105,7 @@ class RelationshipNetwork {
                 vis.tooltip.transition()
                     .duration(200)
                     .style("opacity", 0.9);
-
                 let tooltipContent = `Name: <b>${d.name}</b><br/>Group: <b>${d.group}</b><br/>Link Count: <b>${vis.linkCount[d.id]}</b>`;
-
                 vis.tooltip.html(tooltipContent)
                     .style("left", (event.pageX) + "px")
                     .style("top", (event.pageY - 28) + "px");
@@ -104,54 +118,21 @@ class RelationshipNetwork {
                 vis.handleNodeClick(d);
             });
 
-        // console.log(vis.matrix.nodes.map(d => d.group));
-
-        // Enable dragging
-        function drag(simulation) {
-            function dragstarted(event) {
-                if (!event.active) simulation.alphaTarget(0.3).restart();
-                event.subject.fx = event.subject.x;
-                event.subject.fy = event.subject.y;
-            }
-
-            function dragged(event) {
-                event.subject.fx = event.x;
-                event.subject.fy = event.y;
-            }
-
-            function dragended(event) {
-                if (!event.active) simulation.alphaTarget(0);
-                event.subject.fx = null;
-                event.subject.fy = null;
-            }
-
-            return d3.drag()
-                .on("start", dragstarted)
-                .on("drag", dragged)
-                .on("end", dragended);
-        }
-
-        // Force simulation
-        vis.simulation = d3.forceSimulation(vis.matrix.nodes)
-            .force("link", d3.forceLink(vis.matrix.links)
-                .id(d => d.id)
-                .distance(350)
-                .strength(0.03))
-            .force("charge", d3.forceManyBody().strength(-50))
-            .force("center", d3.forceCenter(vis.width / 2, vis.height / 2))
+        // Update simulation
+        vis.simulation.nodes(vis.nodes)
             .on("tick", () => {
-                link
-                    .attr("x1", d => d.source.x)
+                link.attr("x1", d => d.source.x)
                     .attr("y1", d => d.source.y)
                     .attr("x2", d => d.target.x)
                     .attr("y2", d => d.target.y);
-
-                node
-                    .attr("cx", d => d.x)
+                node.attr("cx", d => d.x)
                     .attr("cy", d => d.y);
             });
 
-        node.call(drag(vis.simulation));
+        vis.simulation.force("link")
+            .links(vis.links);
+
+        vis.simulation.alpha(1).restart();
 
 
 
@@ -160,7 +141,7 @@ class RelationshipNetwork {
         const legendRectSize = 18;
         const legendSpacing = 20;
 
-        const groups = [...new Set(vis.matrix.nodes.map(d => d.group))];
+        const groups = [...new Set(vis.nodes.map(d => d.group))];
         vis.groupColors = d3.scaleOrdinal(d3.schemeCategory10)
             .domain(groups);
 
@@ -193,7 +174,6 @@ class RelationshipNetwork {
         });
     }
 
-
     handleNodeClick(nodeData) {
         let vis = this;
         if (!vis.selectedNodes.find(d => d.id === nodeData.id)) {
@@ -203,8 +183,11 @@ class RelationshipNetwork {
     }
 
     submitSelectedNodes() {
+        let vis = this;
         if (this.selectedNodesSubmit && typeof this.selectedNodesSubmit === "function") {
             this.selectedNodesSubmit(this.selectedNodes);
+            vis.selectedNodes = vis.data;
+            // vis.wrangleData();
         }
     }
 
