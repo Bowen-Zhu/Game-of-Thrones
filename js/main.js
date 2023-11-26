@@ -206,7 +206,7 @@ loadData().then(data => {
     const storyline = new Storyline("storyline", processedData);
     const relationshipMatrix = new RelationshipMatrix(matrix, "matrix", topN, characterNames);
     const relationshipNetwork = new RelationshipNetwork("network", processedData, matrix, groupedData, function(selectedNodes) {
-        console.log('Submitted Nodes in main.js:', selectedNodes);
+        // console.log('Submitted Nodes in main.js:', selectedNodes);
     });
 
     document.getElementById('select-node').addEventListener('click', function() {
