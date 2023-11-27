@@ -14,6 +14,7 @@
 #matrix{
     height: 90vh;
     width: 90vw;
+    margin-left:25%;
 }
 
 #network{
@@ -72,11 +73,11 @@
     margin-bottom: 20px;
 }
 
-.scatterplot-buttons button {
-    margin: 0 10px;
+.scatterplot-buttons button, #select-node {
+    margin: 10px;
     padding: 10px 20px;
     font-size: 16px;
-    background-color: #483D8B;
+    background: rgba(128, 0, 128, 0.8);
     color: white;
     border: none;
     border-radius: 5px;
@@ -95,7 +96,134 @@
 
 .plot-description {
     margin-top: 10px;
-    margin-left: 80px;
+    margin-left: 30px;
     font-size: 14px;
     color: #555;
+}
+
+/* Styles for the bar chart SVG */
+.bar-chart-svg {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px #ccc;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Styles for the bars */
+.bar-attacking, .bar-defending {
+    transition: fill 0.3s ease;
+}
+
+/* Styles for the axis */
+.axis path,
+.axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.axis text {
+    font-size: 12px;
+    fill: #333;
+}
+
+.bar-group:hover .bar {
+    fill: #ff7f50; /* Change the fill color on hover */
+}
+
+/*!* Hover effect for bars *!*/
+/*.bar-attacking:hover, .bar-defending:hover {*/
+/*    fill: #ff7f50;*/
+/*    cursor: pointer;*/
+/*}*/
+
+/* Tooltip styling */
+.bar-tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    pointer-events: none;
+    box-shadow: 0px 0px 10px #aaa;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Show tooltip on hover */
+.bar-attacking:hover + .tooltip, .bar-defending:hover + .tooltip {
+    opacity: 1;
+}
+
+/* Scatterplot SVG styling */
+#scatterplot svg {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.scatter-tooltip {
+    position: absolute;
+    text-align: left;
+    width: 200px;
+    height: auto;
+    padding: 10px;
+    font: 14px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    line-height: 1.5;
+}
+
+/* Style for the circles (data points) */
+.dot {
+    fill: #69b3a2;
+    stroke: #fff;
+    stroke-width: 1px;
+    transition: fill 0.3s ease-in-out, r 0.3s ease-in-out;
+}
+
+/* Hover effect for dots */
+.dot:hover {
+    fill: #ff6347;  /* Change color on hover */
+    r: 10px;        /* Increase radius on hover */
+}
+.card{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.card img{
+    width: 30%;
+    align-self: center;
+    border-radius: 5px;
+}
+.horizontal{
+    overflow-y: hidden;
+}
+.slider {
+    font-family: sans-serif;
+    scroll-snap-type: x mandatory;
+    display: flex;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: scroll;
+}
+section {
+    border-right: 1px solid white;
+    padding: 1rem;
+    width: 90vw;
+    height: 90vh;
+    scroll-snap-align: start;
+    text-align: center;
+    position: relative;
+    margin-right: 30px;
 }

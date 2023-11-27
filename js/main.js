@@ -7,6 +7,8 @@ async function loadData() {
         const charactersResponse = await fetch('data/characters.json');
         const episodesResponse = await fetch('data/episodes.json');
         const groupsResponse = await fetch('data/characters-groups.json');
+        const battlesResponse = await fetch('data/battles.csv');
+        const deathsResponse = await fetch('data/character-deaths.csv');
 
         if (!charactersResponse.ok || !episodesResponse.ok) {
             throw new Error('Network response was not ok.');
@@ -15,11 +17,18 @@ async function loadData() {
         const charactersData = await charactersResponse.json();
         const episodesData = await episodesResponse.json();
         const groupsData = await groupsResponse.json();
+        const battlesText = await battlesResponse.text();
+        const battlesData = Papa.parse(battlesText, { header: true, dynamicTyping: true }).data;
+        const deathsText = await deathsResponse.text();
+        const deathsData = Papa.parse(deathsText, { header: true, dynamicTyping: true }).data;
+
 
         return {
             charactersData: charactersData,
             episodesData: episodesData,
-            groupsData: groupsData
+            groupsData: groupsData,
+            battlesData: battlesData,
+            deathsData: deathsData
         };
 
     } catch (error) {
@@ -206,11 +215,29 @@ loadData().then(data => {
     const storyline = new Storyline("storyline", processedData);
     const relationshipMatrix = new RelationshipMatrix(matrix, "matrix", topN, characterNames);
     const relationshipNetwork = new RelationshipNetwork("network", processedData, matrix, groupedData, function(selectedNodes) {
-        // console.log('Submitted Nodes in main.js:', selectedNodes);
+        console.log('Submitted Nodes in main.js:', selectedNodes);
+
+        let selectedCharacterNames = selectedNodes.map(node => node.characterName);
+
+        // Update the storyline and matrix with the selected characters
+        storyline.update(selectedCharacterNames);
+        relationshipMatrix.updateMatrix(selectedCharacterNames);
     });
+    const barchart = new Barchart(data.battlesData);
+    barchart.createChart();
 
     document.getElementById('select-node').addEventListener('click', function() {
         relationshipNetwork.submitSelectedNodes();
+    });
+
+    const scatterplot = new Scatterplot(processedData, data.deathsData, relationshipNetwork, data.battlesData);
+
+    document.getElementById('button1').addEventListener('click', function() {
+        scatterplot.drawRelationships();
+    });
+
+    document.getElementById('button2').addEventListener('click', function() {
+        scatterplot.drawBattles();
     });
 }).catch(error => {
     console.error('Error processing data:', error.message);

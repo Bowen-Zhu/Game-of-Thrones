@@ -21,96 +21,139 @@
     </div>
 </nav>
 <div class="container">
-    <h1 class="title">Bonds and Bloodshed in the Game of Thrones</h1>
-    <div class="row">
-        <h2 class="plot-title">Storyline</h2>
-        <div id="storyline"></div>
-        <div class="plot-description">
-            A visualization of when each character is on screen throughout the entire show.<br>
-            Users proceed to explore the nature of the relationship between characters by scrolling down.
-        </div>
-    </div>
-    <div class="row">
-        <h2 class="plot-title">Relationship Matrix</h2>
-        <div id="matrix">
-            <div class="plot-filter-top-right">
-                <select id="filterPlot2">
-                    <option value="option1">Allegiance 1</option>
-                    <option value="option2">Allegiance 2</option>
-                    <option value="option3">Allegiance 3</option>
-                </select>
+    <div class="row" id="intro">
+
+        <div class="col">
+            <div class="card">
+                <h1 class="title">Bonds and Bloodshed in the Game of Thrones</h1>
+                <div class="card-title">
+                    <h2 class="plot-title">Relationships</h2>
+                </div>
+                <div class="card-body">
+                    <div class="plot-description">
+                        To explore the nature of relationships and character interactions in Game of Thrones, scroll down.
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="plot-description">
-            Users can switch between the relationship matrix and relationship network by scrolling left and right.<br>
-            Clicking on the matrix would highlight relationships in the force visualization.<br>
-            The characters can be filtered by allegiances.<br>
-            Users proceed to explore the factors affecting the survival rate by choosing among the buttons at the bottom.
+        <div class="col-3">
+            <div class="card">
+                <div class="card-title">
+                    <h2 class="plot-title">Relationship Network</h2>
+                </div>
+                <div class="card-body">
+                    <div class="plot-description">
+                        Hover over the circles to see the number of relationships each character has. <br>
+                        To reveal information about a specific character, click on as many of the circles then click <strong>Submit Selection</strong> below.<br>
+                    </div>
+                    <div class="network-button">
+                        <button id="select-node" type="button" class="btn btn-primary">Submit Selection</button>
+                    </div>
+                </div>
+
+            </div>
         </div>
-        <h2 class="plot-title">Relationship Network</h2>
-        <div class="network-container">
-            <div id="network"></div>
-            <div class="network-button">
-                <button id="select-node" type="button" class="btn btn-primary">Submit Selection</button>
+        <div class="col-9">
+            <div class="network-container">
+                <div id="network">
+
+                </div>
             </div>
         </div>
     </div>
-    </div>
-    <!-- Placeholders -->
-    <h2 class="plot-title">Correlation between the survival rate and ...</h2>
-    <div class="scatterplot-buttons">
-        <button id="button1">allegiance</button>
-        <button id="button2">nobility status</button>
-        <button id="button3">gender</button>
-    </div>
-    <div class="scatterplots-container">
-        <div class="scatterplot">
-            <div id="scatterplot1"></div>
-        </div>
-        <div class="scatterplot">
-            <div id="scatterplot2"></div>
-<!--            <p class="plot-description">Descriptions for Scatterplot...</p>-->
+    <div class="row" >
+        <div class="col">
+            <div class="card">
+                <div class="card-title">
+                    <h2 class="plot-title">Relationships and Storyline</h2>
+                </div>
+                <div class="card-body">
+                    <div class="plot-description">
+                        Explore the length of interactions between characters on screen in the matrix.<br>
+                        Scroll right or left to see more visualizations to reveal interesting trends in character appearances in different episodes. The clustering may suggest important episodes and possibly important events. You can also choose which characters you want to take a deep dive into by specifying in the network above.
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <p class="plot-description">
-        A series of regressions to show the correlation between the survival rate and some specific variables, such as allegiance, nobility status, gender...
-    </p>
+    <div class="row">
+
+
+    </div>
+    <div class="row">
+
+    </div>
+    <div class="horizontal">
+        <div class="slider">
+            <section>
+                <div class="card">
+                    <h2 class="plot-title">Relationship Matrix</h2>
+                    <div id="matrix">
+                    </div>
+
+                </div>
+            </section>
+            <section>
+                <div class="card">
+                    <h2 class="plot-title">Storyline</h2>
+                    <div class="plot-description">
+                        A visualization of when each character is on screen throughout the entire show.<br>
+                        Users proceed to explore the nature of the relationship between characters by scrolling down.
+                    </div>
+                    <div id="storyline"></div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+
+    <div>
+        <!-- Placeholders -->
+        <h2 class="plot-title">Correlation between the life length and the number of ...</h2>
+        <div class="scatterplot-buttons">
+            <button id="button1">relationships</button>
+            <button id="button2">battles involved</button>
+        </div>
+
+        <div class="scatterplots-container">
+            <div id="scatterplot"></div>
+        </div>
+    </div>
+
+    <h2 class="plot-title">Kings' Success Rate</h2>
+    <div class="container">
+        <div id="barchart"></div>
+        <div id="tooltip" class="bar-tooltip" style="opacity:0;"></div>
+    </div>
+    <div id="popupBarchart">
+
+    </div>
+
+
 </div>
-<!--<div class="container">-->
-<!--    <div id="firstPage" class="page">-->
-<!--        &lt;!&ndash; Timeline content &ndash;&gt;-->
-<!--        <div id="storyline"></div>-->
-<!--    </div>-->
-<!--    <div id="secondPage" class="page">-->
-<!--        &lt;!&ndash; Matrix content &ndash;&gt;-->
-<!--        <div id="matrix"></div>-->
-<!--    </div>-->
-<!--    <div id="thirdPage" class="page">-->
-<!--        &lt;!&ndash; Network content &ndash;&gt;-->
-<!--        <div id="network"></div>-->
-<!--    </div>-->
-<!--    <div id="fourthPage" class="page">-->
-<!--        &lt;!&ndash; Placeholders &ndash;&gt;-->
-<!--        <div id="scatterplot1"></div>-->
-<!--        <div id="scatterplot2"></div>-->
-<!--    </div>-->
-<!--</div>-->
 
 <!-- BOOTSTRAP -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <!-- d3 -->
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <script src="https://d3js.org/topojson.v2.min.js"></script>
 <script src="https://d3js.org/d3-geo.v1.min.js"></script>
+<!--csv-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
 
 <!-- OWN JS -->
 <script src="js/timeline.js"></script>
 <script src="js/network.js"></script>
 <script src="js/matrix.js"></script>
 <script src="js/scatterplot.js"></script>
+<script src="js/barchart.js"></script>
 
 <script src="js/main.js"></script>
 </body>

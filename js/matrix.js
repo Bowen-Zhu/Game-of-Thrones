@@ -13,11 +13,6 @@ class RelationshipMatrix {
             .attr("class", "matrix-tooltip")
             .style("opacity", 0);
 
-        this.purpleScale = d3.scaleLinear()
-            .domain([0, this.maxScreenTime])
-            .range(["#f2e0f7", "#d000d0"])
-            .interpolate(d3.interpolateRgb);
-
         this.renderMatrix();
     }
 
@@ -66,6 +61,11 @@ class RelationshipMatrix {
             .domain(vis.characterNames)
             .padding(0.1);
 
+        vis.purpleScale = d3.scaleLinear()
+            .domain([0, this.maxScreenTime])
+            .range(["#f2e0f7", "#d000d0"])
+            .interpolate(d3.interpolateRgb);
+
         const cellSize = vis.yScale.bandwidth();
 
         // Column labels
@@ -79,7 +79,7 @@ class RelationshipMatrix {
             .attr("y", -10)
             .attr("text-anchor", "start")
             .attr("transform", (d, i) => `rotate(-90, ${cellSize * i + cellSize / 2}, -10)`)
-            .style("font-size", "12px");
+            .style("font-size", "8px");
 
         // Row labels
         vis.svg.append("g")
@@ -91,7 +91,7 @@ class RelationshipMatrix {
             .attr("x", -10)
             .attr("y", (d, i) => cellSize * i + cellSize / 2)
             .attr("text-anchor", "end")
-            .style("font-size", "12px");
+            .style("font-size", "8px");
 
         // Add matrix cells
         vis.rows = vis.svg.selectAll(".row")
@@ -183,5 +183,28 @@ class RelationshipMatrix {
             .attr("transform", `translate(0, ${vis.height})`)
             .call(legendAxis);
     }
+    updateMatrix(selectedCharacterNames) {
+        let vis = this;
+
+        // Map the selected character names to their indices in the original array of character names
+        let selectedIndices = selectedCharacterNames.map(name => vis.characterNames.indexOf(name));
+
+        // Filter the matrix
+        let filteredMatrix = selectedIndices.map(rowIndex => {
+            return selectedIndices.map(colIndex => vis.matrixData[rowIndex][colIndex]);
+        });
+
+        // Update character names and matrix data
+        this.characterNames = selectedCharacterNames;
+        this.matrixData = filteredMatrix;
+
+        // Recalculate the maximum screen time for the new matrix
+        this.maxScreenTime = this.calculateMaxScreenTime();
+
+        d3.select("#" + vis.parentElement).select("svg").remove();
+
+        this.renderMatrix();
+    }
+
 
 }
