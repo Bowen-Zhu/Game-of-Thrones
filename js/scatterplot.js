@@ -4,6 +4,13 @@ class Scatterplot {
         this.deathsData = deathsData;
         this.battlesData = battlesData;
         this.currentPlotType = 'Links';  // 'Links' or 'Battles'
+        // Initialize clicked tooltip state
+        this.clickedTooltipData = null;
+        // Bind event handlers
+        this.mouseover = this.mouseover.bind(this);
+        this.mouseleave = this.mouseleave.bind(this);
+        this.clickDot = this.clickDot.bind(this);
+        this.clickOutside = this.clickOutside.bind(this);
 
         this.chaptersPerBook = 80; // Assuming each book has 80 chapters
         this.init();
@@ -44,6 +51,14 @@ class Scatterplot {
 
         this.svg.append("g")
             .call(d3.axisLeft(this.y).tickFormat(d => {return Number.isInteger(d) ? `Book ${Math.floor(d)}` : ``})); // Y-axis for death chapter
+
+        // Initialize the tooltip
+        this.tooltip = d3.select("body").append("div")
+            .attr("class", "scatter-tooltip")
+            .style("opacity", 0);
+
+        // Attach click event listener to the document
+        d3.select(document).on("click", this.clickOutside);
     }
 
     clearPlot() {
@@ -62,8 +77,6 @@ class Scatterplot {
     }
 
     wrangleDataLinks(data) {
-        // console.log("Processed Data in network.js:", data);
-
         let nodes = [];
         let links = [];
 
@@ -185,33 +198,47 @@ class Scatterplot {
         this.updateChart();
     }
 
+    // Mouse event functions
+    mouseover(event, d) {
+        // reset the clicked tooltip data
+        if (this.clickedTooltipData && this.clickedTooltipData !== d) {
+            this.clickedTooltipData = null;
+        }
+        this.tooltip.transition()
+            .duration(200)
+            .style("opacity", .9);
+        this.tooltip.html(`Character: ${d.name}<br>${this.currentPlotType}: ${d.count}<br>Death: Book ${d.bookOfDeath}, Chapter ${d.deathChapter}`)
+            .style("left", (event.pageX) + "px")
+            .style("top", (event.pageY - 28) + "px");
+    }
+
+    mouseleave(event, d) {
+        if (!this.clickedTooltipData) {
+            this.tooltip.transition()
+                .duration(500)
+                .style("opacity", 0);
+        }
+    }
+
+    clickDot(event, d) {
+        this.clickedTooltipData = d;
+        this.mouseover(event, d);
+        event.stopPropagation();
+    }
+
+    clickOutside() {
+        if (this.clickedTooltipData && !event.target.classList.contains('dot')) {
+            this.clickedTooltipData = null;
+            this.tooltip.style("opacity", 0);
+        }
+    }
+
     updateChart() {
         const plotTypeText = this.currentPlotType;
         // Tooltip setup
         const tooltip = d3.select("body").append("div")
             .attr("class", "scatter-tooltip")
             .style("opacity", 0);
-
-        // Mouse event functions
-        const mouseover = function(event, d) {
-            tooltip.transition()
-                .duration(200)
-                .style("opacity", .9);
-            tooltip.html(`Character: ${d.name}<br>${plotTypeText}: ${d.count}<br>Death: Book ${d.bookOfDeath}, Chapter ${d.deathChapter}`)
-                .style("left", (event.pageX) + "px")
-                .style("top", (event.pageY - 28) + "px");
-        };
-
-        const mousemove = function(event, d) {
-            tooltip.style("left", (event.pageX) + "px")
-                .style("top", (event.pageY - 28) + "px");
-        };
-
-        const mouseleave = function(event, d) {
-            tooltip.transition()
-                .duration(500)
-                .style("opacity", 0);
-        };
 
         // Add dots (data points)
         this.svg.selectAll(".dot")
@@ -221,10 +248,11 @@ class Scatterplot {
             .attr("class", "dot")
             .attr("cx", d => this.x(d.count))
             .attr("cy", d => this.y(d.bookScaledChapter))
-            .attr("r", 5)
-            // .style("fill", "#69b3a2")
-            .on("mouseover", mouseover)
-            .on("mousemove", mousemove)
-            .on("mouseleave", mouseleave);
+            .attr("r", 5);
+
+        this.svg.selectAll(".dot")
+            .on("mouseover", this.mouseover)
+            .on("mouseleave", this.mouseleave)
+            .on("click", this.clickDot);
     }
 }
