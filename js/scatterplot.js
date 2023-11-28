@@ -4,7 +4,7 @@ class Scatterplot {
         this.processedDataFull = processedDataFull;
         this.deathsData = deathsData;
         this.battlesData = battlesData;
-        this.currentPlotType = 'Links';  // 'Links' or 'battles'
+        this.currentPlotType = 'Links';  // 'Links' or 'Battles'
 
         this.chaptersPerBook = 80; // Assuming each book has 80 chapters
         this.data = this.prepareDataLinks(); // Prepare the data for the scatterplot
@@ -31,7 +31,7 @@ class Scatterplot {
             .range([0, this.width]);
 
         this.y = d3.scaleLinear()
-            .domain([0, d3.max(this.data, d => d.bookScaledChapter)]) // Domain based on bookScaledChapter
+            .domain([1, d3.max(this.data, d => d.bookScaledChapter+0.1)]) // Domain based on bookScaledChapter
             .range([this.height, 0]);
 
         // Add X and Y axis
@@ -40,7 +40,7 @@ class Scatterplot {
             .call(d3.axisBottom(this.x)); // X-axis for link count
 
         this.svg.append("g")
-            .call(d3.axisLeft(this.y).tickFormat(d => `Book ${Math.floor(d)}`)); // Y-axis for death chapter
+            .call(d3.axisLeft(this.y).tickFormat(d => {return Number.isInteger(d) ? `Book ${Math.floor(d)}` : ``})); // Y-axis for death chapter
     }
 
     clearPlot() {
@@ -54,7 +54,7 @@ class Scatterplot {
             .call(d3.axisBottom(this.x)); // X-axis for link count
 
         this.svg.append("g")
-            .call(d3.axisLeft(this.y).tickFormat(d => `Book ${Math.floor(d)}`)); // Y-axis for death chapter
+            .call(d3.axisLeft(this.y).tickFormat(d => {return Number.isInteger(d) ? `Book ${Math.floor(d)}` : ``})); // Y-axis for death chapter
 
     }
 
