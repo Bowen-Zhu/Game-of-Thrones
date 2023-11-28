@@ -1,17 +1,20 @@
 class Scatterplot {
-    constructor(processedData, processedDataFull, deathsData, battlesData) {
-        this.processedData = processedData;
+    constructor(processedDataFull, deathsData, battlesData) {
         this.processedDataFull = processedDataFull;
         this.deathsData = deathsData;
         this.battlesData = battlesData;
         this.currentPlotType = 'Links';  // 'Links' or 'Battles'
 
         this.chaptersPerBook = 80; // Assuming each book has 80 chapters
-        this.data = this.prepareDataLinks(); // Prepare the data for the scatterplot
         this.init();
     }
 
     init() {
+        // Map to quickly find a character in processedDataFull
+        this.characterMap = new Map(this.processedDataFull.map(d => [d.characterName, d]));
+        // Prepare the data for the scatterplot
+        this.data = this.prepareDataLinks();
+
         this.margin = { top: 10, right: 30, bottom: 40, left: 60 };
         this.width = 600 - this.margin.left - this.margin.right;
         this.height = 400 - this.margin.top - this.margin.bottom;
@@ -110,11 +113,9 @@ class Scatterplot {
         const linkCountArr = this.wrangleDataLinks(this.processedDataFull);
 
         let dataset = [];
-        const characterMap = new Map(this.processedData.map(d => [d.characterName, d]));
-
         this.deathsData.forEach(death => {
-            if (death['Book of Death'] && death['Death Chapter'] && characterMap.has(death.Name)) {
-                const characterIndex = this.processedData.findIndex(d => d.characterName === death.Name);
+            if (death['Book of Death'] && death['Death Chapter'] && this.characterMap.has(death.Name)) {
+                const characterIndex = this.processedDataFull.findIndex(d => d.characterName === death.Name);
                 const linkCount = linkCountArr[characterIndex];
                 const bookScaledChapter = death['Book of Death'] + death['Death Chapter'] / this.chaptersPerBook;
 
@@ -143,11 +144,7 @@ class Scatterplot {
 
     prepareDataBattles() {
         let dataset = [];
-
-        // Map to quickly find a character in processedData
-        const characterMap = new Map(this.processedData.map(d => [d.characterName, d]));
-
-        this.processedData.forEach(character => {
+        this.processedDataFull.forEach(character => {
             let battleCount = 0;
             this.battlesData.forEach(battle => {
                 // Convert the battle record into a string and check for character's name
@@ -158,8 +155,8 @@ class Scatterplot {
                 }
             });
 
-            if (characterMap.has(character.characterName)) {
-                const characterIndex = this.processedData.findIndex(d => d.characterName === character.characterName);
+            if (this.characterMap.has(character.characterName)) {
+                const characterIndex = this.processedDataFull.findIndex(d => d.characterName === character.characterName);
                 const death = this.deathsData.find(d => d.Name === character.characterName);
 
                 if (death && death['Book of Death'] && death['Death Chapter']) {

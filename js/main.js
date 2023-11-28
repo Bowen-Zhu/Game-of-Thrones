@@ -236,7 +236,7 @@ loadData().then(data => {
         relationshipNetwork.reloadSelectedNodes();
     });
 
-    const scatterplot = new Scatterplot(processedData, processedDataFull, data.deathsData, data.battlesData);
+    const scatterplot = new Scatterplot(processedDataFull, data.deathsData, data.battlesData);
 
     document.getElementById('button1').addEventListener('click', function() {
         scatterplot.drawRelationships();
