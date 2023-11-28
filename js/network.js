@@ -41,7 +41,7 @@ class RelationshipNetwork {
         // Initialize force simulation
         vis.simulation = d3.forceSimulation()
             .force("link", d3.forceLink().id(d => d.id).distance(100))
-            .force("charge", d3.forceManyBody())
+            .force("charge", d3.forceManyBody().strength(-20))
             .force("center", d3.forceCenter(0, 0))
             .on("tick", () => vis.ticked());
 
@@ -134,7 +134,7 @@ class RelationshipNetwork {
                     .style("opacity", 0.9);
                 let tooltipContent = `
                 Name: <b>${d.characterName}</b><br/>
-                Group: <b>${d.group}</b><br/>
+                House: <b>${d.group}</b><br/>
                 Count: <b>${vis.linkCount[d.id]}</b>
                 `;
                 vis.tooltip.html(tooltipContent)
@@ -169,11 +169,16 @@ class RelationshipNetwork {
             this.parentNode.appendChild(this);
         });
 
+        // TODO: Update legend
+        // console.log("legend nodes", vis.nodes);
+
         // Update graph
         vis.simulation.nodes(vis.nodes);
         vis.simulation.force("link").links(vis.links);
         vis.simulation.alpha(1).restart();
     }
+
+
 
     ticked() {
         let vis = this;
@@ -186,6 +191,8 @@ class RelationshipNetwork {
             .attr("x2", d => d.target.x)
             .attr("y2", d => d.target.y);
     }
+
+
 
     drag(simulation) {
         function dragStarted(event, d) {
@@ -210,6 +217,8 @@ class RelationshipNetwork {
             .on("drag", dragged)
             .on("end", dragEnded);
     }
+
+
 
     handleNodeClick(node) {
         let vis = this;
@@ -238,6 +247,8 @@ class RelationshipNetwork {
          */
     }
 
+
+
     submitSelectedNodes() {
         let vis = this;
 
@@ -253,23 +264,21 @@ class RelationshipNetwork {
             document.getElementById("select-node").disabled = false;
         }
 
-        if (this.selectedNodesSubmit && typeof this.selectedNodesSubmit === "function") {
-            this.selectedNodesSubmit(this.selectedNodes);
-            vis.data = vis.selectedNodes;
-            // console.log("Submitted Nodes in network.js:", vis.data);
+        vis.data = vis.selectedNodes;
 
-            vis.nodes.forEach(node => {
-                node.isSelected = false;
-            });
+        vis.nodes.forEach(node => {
+            node.isSelected = false;
+        });
 
-            vis.wrangleData();
-        }
+        vis.wrangleData();
     }
+
+
 
     reloadSelectedNodes() {
         let vis = this;
 
-        vis.data = this.copy;
+        vis.data = vis.copy;
         vis.nodes.forEach(node => {
             node.isSelected = false;
         });
