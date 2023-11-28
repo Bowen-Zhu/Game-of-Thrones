@@ -17,7 +17,7 @@
 <body>
 <nav class="navbar navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Bonds and Bloodshed</a>
+        <a class="navbar-brand">Bonds and Bloodshed</a>
     </div>
 </nav>
 <div class="container">
@@ -49,13 +49,18 @@
                         To reveal information about a specific character, click on as many of the circles then click <strong>Submit Selection</strong> below.<br>
                     </div>
                     <div class="network-button">
-                        <button id="select-node" type="button" class="btn btn-primary"
-                                data-bs-toggle="popover"
-                                data-bs-trigger="hover focus"
-                                data-bs-content="Disabled popover"
-                                tabindex="0">
-                            Submit
-                        </button>
+                        <button id="select-node" type="button" class="btn btn-primary">Submit</button>
+                        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="toast-header">
+                                    <strong class="me-auto">Warning</strong>
+                                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                                </div>
+                                <div class="toast-body">
+                                    Sorry, you have to submit at least three nodes. Please reload to proceed.
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="network-button">
                         <button id="reload-node" type="button" class="btn btn-primary">Reload</button>

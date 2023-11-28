@@ -243,6 +243,11 @@ class RelationshipNetwork {
 
         if (vis.selectedNodes.length < 4) {
             document.getElementById("select-node").disabled = true;
+
+            let toastElement = document.getElementById("liveToast");
+            let toast = new bootstrap.Toast(toastElement);
+            toast.show();
+
             return;
         } else {
             document.getElementById("select-node").disabled = false;
@@ -268,6 +273,7 @@ class RelationshipNetwork {
         vis.nodes.forEach(node => {
             node.isSelected = false;
         });
+        document.getElementById("select-node").disabled = false;
 
         vis.wrangleData();
     }
