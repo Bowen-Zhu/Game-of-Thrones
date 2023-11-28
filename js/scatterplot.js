@@ -1,8 +1,8 @@
 class Scatterplot {
-    constructor(processedData, deathsData, relationshipNetwork, battlesData) {
+    constructor(processedData, processedDataFull, deathsData, battlesData) {
         this.processedData = processedData;
+        this.processedDataFull = processedDataFull;
         this.deathsData = deathsData;
-        this.relationshipNetwork = relationshipNetwork;
         this.battlesData = battlesData;
         this.currentPlotType = 'Links';  // 'Links' or 'battles'
 
@@ -58,14 +58,64 @@ class Scatterplot {
 
     }
 
+    wrangleDataLinks(data) {
+        // console.log("Processed Data in network.js:", data);
+
+        let nodes = [];
+        let links = [];
+
+        // Process nodes
+        data.forEach((d, i) => {
+            nodes.push({
+                ...d,
+                "id": i
+            });
+        });
+
+        // Process links
+        nodes.forEach((node, i) => {
+            data.forEach((d) => {
+                ["killed", "marriedEngaged", "guardianOf", "guardedBy", "killedBy", "parents", "parentOf", "serves", "servedBy", "siblings"].forEach((relation) => {
+                    if (d[relation] && d[relation].includes(node.characterName)) {
+                        let targetNode = nodes.find(n => n.characterName === d.characterName);
+                        if (targetNode) {
+                            links.push({
+                                "source": node.id,
+                                "target": targetNode.id,
+                            });
+                        }
+                    }
+                });
+            });
+        });
+
+        // Count links for each node
+        let linkCount = new Array(nodes.length).fill(0);
+        let countedLinks = new Set();
+
+        links.forEach(link => {
+            let linkId = link.source < link.target ? `${link.source}-${link.target}` : `${link.target}-${link.source}`;
+
+            if (!countedLinks.has(linkId)) {
+                linkCount[link.source]++;
+                linkCount[link.target]++;
+                countedLinks.add(linkId);
+            }
+        });
+        return linkCount;
+    }
+
     prepareDataLinks() {
+        // const linkCountArr = this.relationshipNetwork.linkCount;
+        const linkCountArr = this.wrangleDataLinks(this.processedDataFull);
+
         let dataset = [];
         const characterMap = new Map(this.processedData.map(d => [d.characterName, d]));
 
         this.deathsData.forEach(death => {
             if (death['Book of Death'] && death['Death Chapter'] && characterMap.has(death.Name)) {
                 const characterIndex = this.processedData.findIndex(d => d.characterName === death.Name);
-                const linkCount = this.relationshipNetwork.linkCount[characterIndex];
+                const linkCount = linkCountArr[characterIndex];
                 const bookScaledChapter = death['Book of Death'] + death['Death Chapter'] / this.chaptersPerBook;
 
                 dataset.push({

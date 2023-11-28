@@ -45,7 +45,7 @@ function sec(timeString){
     return sec;
 }
 
-function wrangleData(charactersData, episodesData, groupsData, topN) {
+function wrangleData(charactersData, episodesData, groupsData) {
     // Parse JSON Data
     const characters = charactersData.characters;
     const episodes = episodesData.episodes;
@@ -119,8 +119,7 @@ function wrangleData(charactersData, episodesData, groupsData, topN) {
     // Sort Characters by Total Screen Time in Descending Order
     characterArray.sort((a, b) => b.totalScreenTime - a.totalScreenTime);
 
-    // Slice the Top N Characters
-    return characterArray.slice(0, topN);
+    return characterArray;
 }
 
 function sortCharactersByGroup(processedData, groupsData) {
@@ -199,13 +198,16 @@ function createSharedScreenTimeMatrixCustomize(characterArray) {
 }
 
 let topN = 50;
+let processedDataFull;
 let processedData;
 let matrix;
 let groupedData;
 let groupedMatrix;
 
 loadData().then(data => {
-    processedData = wrangleData(data.charactersData, data.episodesData, data.groupsData, topN);
+    processedDataFull = wrangleData(data.charactersData, data.episodesData, data.groupsData);
+    // Slice the Top N Characters
+    processedData = processedDataFull.slice(0, topN);
     matrix = createSharedScreenTimeMatrix(processedData, topN);
 
     groupedData = sortCharactersByGroup(processedData, data.groupsData);
@@ -234,7 +236,7 @@ loadData().then(data => {
         relationshipNetwork.reloadSelectedNodes();
     });
 
-    const scatterplot = new Scatterplot(processedData, data.deathsData, relationshipNetwork, data.battlesData);
+    const scatterplot = new Scatterplot(processedData, processedDataFull, data.deathsData, data.battlesData);
 
     document.getElementById('button1').addEventListener('click', function() {
         scatterplot.drawRelationships();
