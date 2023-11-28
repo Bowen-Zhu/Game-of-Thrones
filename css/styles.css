@@ -14,11 +14,11 @@
 #matrix{
     height: 90vh;
     width: 90vw;
-    margin-left:25%;
+    margin-left: 25%;
 }
 
 #network{
-    height: 90vh;
+    height: 75vh;
     width: 90vw;
 }
 
@@ -64,7 +64,7 @@
     font-size: 14px;
 }
 
-.network-button {
+.network-buttons {
     text-align: center;
 }
 
@@ -73,7 +73,7 @@
     margin-bottom: 20px;
 }
 
-.scatterplot-buttons button, #select-node {
+.scatterplot-buttons button, #select-node, #reload-node {
     margin: 10px;
     padding: 10px 20px;
     font-size: 16px;
@@ -82,6 +82,12 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.network-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .scatterplots-container {

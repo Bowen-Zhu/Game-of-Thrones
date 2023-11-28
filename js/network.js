@@ -46,6 +46,7 @@ class RelationshipNetwork {
             .on("tick", () => vis.ticked());
 
         vis.wrangleData();
+
     }
 
 
@@ -169,13 +170,12 @@ class RelationshipNetwork {
             this.parentNode.appendChild(this);
         });
 
-        // TODO: Update legend
-        // console.log("legend nodes", vis.nodes);
-
         // Update graph
         vis.simulation.nodes(vis.nodes);
         vis.simulation.force("link").links(vis.links);
         vis.simulation.alpha(1).restart();
+
+        vis.createLegend();
     }
 
 
@@ -217,6 +217,47 @@ class RelationshipNetwork {
             .on("drag", dragged)
             .on("end", dragEnded);
     }
+
+
+
+
+    createLegend() {
+        let vis = this;
+
+        vis.groups = Array.from(new Set(vis.nodes.map(node => node.group))).sort();
+
+        vis.legendRectSize = 15;
+        vis.legendSpacing = 20;
+
+        vis.svg.select(".legend").remove();
+
+        // Create legend group
+        vis.legend = vis.svg.append("g")
+            .attr("class", "legend")
+            .attr("transform", `translate(-${vis.width / 2}, -${vis.height / 2})`);
+
+        // Update legend group
+        vis.groups.forEach((group, index) => {
+            let legendItem = vis.legend.append("g")
+                .attr("class", "legend-item")
+                .attr("transform", `translate(0, ${index * vis.legendSpacing})`);
+
+            legendItem.append("rect")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("width", vis.legendRectSize)
+                .attr("height", vis.legendRectSize)
+                .style("fill", vis.color(group));
+
+            legendItem.append("text")
+                .attr("x", vis.legendRectSize + 5)
+                .attr("y", vis.legendRectSize / 2)
+                .attr("dy", ".35em")
+                .style("text-anchor", "start")
+                .text(group);
+        });
+    }
+
 
 
 
@@ -279,9 +320,11 @@ class RelationshipNetwork {
         let vis = this;
 
         vis.data = vis.copy;
+
         vis.nodes.forEach(node => {
             node.isSelected = false;
         });
+
         document.getElementById("select-node").disabled = false;
 
         vis.wrangleData();
