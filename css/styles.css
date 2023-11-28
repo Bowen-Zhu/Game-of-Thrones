@@ -200,6 +200,13 @@
     fill: #ff6347;  /* Change color on hover */
     r: 10px;        /* Increase radius on hover */
 }
+
+.dot-selected {
+    fill: #fff;      /* White center */
+    stroke: #ff6347; /* Original edge color */
+    stroke-width: 3px;
+}
+
 .card{
     margin-top: 30px;
     margin-bottom: 30px;

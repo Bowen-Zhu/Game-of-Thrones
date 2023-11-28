@@ -202,13 +202,16 @@ class Scatterplot {
     mouseover(event, d) {
         // reset the clicked tooltip data
         if (this.clickedTooltipData && this.clickedTooltipData !== d) {
+            // Remove 'selected' class from all dots
+            d3.selectAll('.dot').classed('dot-selected', false);
+
             this.clickedTooltipData = null;
         }
         this.tooltip.transition()
             .duration(200)
             .style("opacity", .9);
         this.tooltip.html(`Character: ${d.name}<br>${this.currentPlotType}: ${d.count}<br>Death: Book ${d.bookOfDeath}, Chapter ${d.deathChapter}`)
-            .style("left", (event.pageX) + "px")
+            .style("left", (event.pageX + 10) + "px") // +10 to prevent the tooltip from blocking the dot itself
             .style("top", (event.pageY - 28) + "px");
     }
 
@@ -221,13 +224,21 @@ class Scatterplot {
     }
 
     clickDot(event, d) {
+        // Remove 'selected' class from all dots
+        d3.selectAll('.dot').classed('dot-selected', false);
+
+        // Set the clicked dot as the new selected dot
         this.clickedTooltipData = d;
+        d3.select(event.target).classed('dot-selected', true);
+
         this.mouseover(event, d);
         event.stopPropagation();
     }
 
     clickOutside() {
-        if (this.clickedTooltipData && !event.target.classList.contains('dot')) {
+        if (this.clickedTooltipData) {
+            // Remove 'selected' class when clicking outside
+            d3.selectAll('.dot').classed('dot-selected', false);
             this.clickedTooltipData = null;
             this.tooltip.style("opacity", 0);
         }
