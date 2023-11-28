@@ -2,6 +2,7 @@ class RelationshipNetwork {
     constructor(parentElement, data, sharedScreenTime, groupedCharacter, selectedNodesSubmit) {
         this.parentElement = parentElement;
         this.data = data;
+        this.copy = data;
         this.sharedScreenTime = sharedScreenTime;
         this.groupedCharacter = groupedCharacter;
         this.selectedNodesSubmit = selectedNodesSubmit;
@@ -33,7 +34,7 @@ class RelationshipNetwork {
         vis.color = d3.scaleOrdinal(d3.schemeTableau10);
 
         // Create tooltip
-        this.tooltip = d3.select("body").append("div")
+        vis.tooltip = d3.select("body").append("div")
             .attr("class", "network-tooltip")
             .style("opacity", 0);
 
@@ -55,9 +56,9 @@ class RelationshipNetwork {
         // console.log("Shared Screen Time in network.js:", vis.sharedScreenTime);
         // console.log("Grouped Characters in network.js:", vis.groupedCharacter);
 
-        this.nodes = [];
-        this.links = [];
-        this.selectedNodes = [];
+        vis.nodes = [];
+        vis.links = [];
+        vis.selectedNodes = [];
 
         // Process nodes
         vis.data.forEach((d, i) => {
@@ -98,7 +99,7 @@ class RelationshipNetwork {
             }
         });
 
-        this.updateVis();
+        vis.updateVis();
     }
 
 
@@ -145,10 +146,20 @@ class RelationshipNetwork {
                     .style("opacity", 0);
             })
             .on("click", function (event, d) {
-                d.isSelected = !d.isSelected;
-                d3.select(this)
-                    .attr("stroke", d => d.isSelected ? "black" : "white")
-                    .attr("stroke-width", d => d.isSelected ? 2 : 1.5);
+                if (!d.isSelected) {
+                    d.isSelected = true;
+                    vis.links.forEach(link => {
+                        if (link.source === d || link.target === d) {
+                            let connectedNode = link.source === d ? link.target : link.source;
+                            connectedNode.isSelected = true;
+                        }
+                    });
+                } else {
+                    d.isSelected = false;
+                }
+                vis.node
+                    .attr("stroke", node => node.isSelected ? "black" : "white")
+                    .attr("stroke-width", node => node.isSelected ? 2 : 1.5);
                 vis.handleNodeClick(d);
             })
             .call(this.drag(vis.simulation));
@@ -202,14 +213,18 @@ class RelationshipNetwork {
 
     handleNodeClick(node) {
         let vis = this;
-        let matchedData = vis.data.find(d => d.characterName === node.characterName);
 
-        if (node.isSelected) {
-            if (matchedData && !vis.selectedNodes.find(d => d.characterName === matchedData.characterName)) {
+        vis.selectedNodes = [];
+
+        vis.nodes.forEach(node => {
+            let matchedData = vis.data.find(d => d.characterName === node.characterName);
+            if (node.isSelected && matchedData) {
                 vis.selectedNodes.push(matchedData);
             }
-        } else {
-            vis.selectedNodes = vis.selectedNodes.filter(d => d.characterName !== matchedData.characterName);
+        });
+
+        if (!node.isSelected) {
+            vis.selectedNodes = vis.selectedNodes.filter(d => d.characterName !== node.characterName);
         }
         // console.log("Selected Nodes in network.js:", vis.selectedNodes);
 
@@ -225,6 +240,14 @@ class RelationshipNetwork {
 
     submitSelectedNodes() {
         let vis = this;
+
+        if (vis.selectedNodes.length < 4) {
+            document.getElementById("select-node").disabled = true;
+            return;
+        } else {
+            document.getElementById("select-node").disabled = false;
+        }
+
         if (this.selectedNodesSubmit && typeof this.selectedNodesSubmit === "function") {
             this.selectedNodesSubmit(this.selectedNodes);
             vis.data = vis.selectedNodes;
@@ -236,6 +259,17 @@ class RelationshipNetwork {
 
             vis.wrangleData();
         }
+    }
+
+    reloadSelectedNodes() {
+        let vis = this;
+
+        vis.data = this.copy;
+        vis.nodes.forEach(node => {
+            node.isSelected = false;
+        });
+
+        vis.wrangleData();
     }
 
 }

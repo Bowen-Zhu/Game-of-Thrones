@@ -230,6 +230,10 @@ loadData().then(data => {
         relationshipNetwork.submitSelectedNodes();
     });
 
+    document.getElementById('reload-node').addEventListener('click', function() {
+        relationshipNetwork.reloadSelectedNodes();
+    });
+
     const scatterplot = new Scatterplot(processedData, data.deathsData, relationshipNetwork, data.battlesData);
 
     document.getElementById('button1').addEventListener('click', function() {

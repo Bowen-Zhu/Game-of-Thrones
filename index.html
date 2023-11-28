@@ -49,7 +49,16 @@
                         To reveal information about a specific character, click on as many of the circles then click <strong>Submit Selection</strong> below.<br>
                     </div>
                     <div class="network-button">
-                        <button id="select-node" type="button" class="btn btn-primary">Submit Selection</button>
+                        <button id="select-node" type="button" class="btn btn-primary"
+                                data-bs-toggle="popover"
+                                data-bs-trigger="hover focus"
+                                data-bs-content="Disabled popover"
+                                tabindex="0">
+                            Submit
+                        </button>
+                    </div>
+                    <div class="network-button">
+                        <button id="reload-node" type="button" class="btn btn-primary">Reload</button>
                     </div>
                 </div>
 
