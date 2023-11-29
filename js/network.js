@@ -259,7 +259,6 @@ class RelationshipNetwork {
 
 
 
-
     handleNodeClick(node) {
         let vis = this;
 
@@ -310,7 +309,7 @@ class RelationshipNetwork {
             node.isSelected = false;
         });
 
-        // TODO: BUG
+        // Pass variable to main.js
         let event = new CustomEvent("nodeSelected", { detail: vis.data });
         document.dispatchEvent(event);
 
@@ -330,7 +329,7 @@ class RelationshipNetwork {
             node.isSelected = false;
         });
 
-        // TODO: BUG
+        // Pass variable to main.js
         let event = new CustomEvent("nodeSelected", { detail: vis.data });
         document.dispatchEvent(event);
 
