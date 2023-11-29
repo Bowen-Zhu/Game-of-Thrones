@@ -1,11 +1,10 @@
 class RelationshipNetwork {
-    constructor(parentElement, data, sharedScreenTime, groupedCharacter, selectedNodesSubmit) {
+    constructor(parentElement, data, sharedScreenTime, groupedCharacter) {
         this.parentElement = parentElement;
         this.data = data;
         this.copy = data;
         this.sharedScreenTime = sharedScreenTime;
         this.groupedCharacter = groupedCharacter;
-        this.selectedNodesSubmit = selectedNodesSubmit;
 
         this.initVis();
     }
@@ -311,6 +310,10 @@ class RelationshipNetwork {
             node.isSelected = false;
         });
 
+        // TODO: BUG
+        let event = new CustomEvent("nodeSelected", { detail: vis.data });
+        document.dispatchEvent(event);
+
         vis.wrangleData();
     }
 
@@ -319,13 +322,17 @@ class RelationshipNetwork {
     reloadSelectedNodes() {
         let vis = this;
 
+        document.getElementById("select-node").disabled = false;
+
         vis.data = vis.copy;
 
         vis.nodes.forEach(node => {
             node.isSelected = false;
         });
 
-        document.getElementById("select-node").disabled = false;
+        // TODO: BUG
+        let event = new CustomEvent("nodeSelected", { detail: vis.data });
+        document.dispatchEvent(event);
 
         vis.wrangleData();
     }
