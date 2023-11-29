@@ -126,12 +126,16 @@ class RelationshipMatrix {
                     " " : `Screen Time Together: <b>${d.cellValue} seconds</b>`;
 
                 vis.tooltip.html(`Relationship between <b>${vis.characterNames[d.rowIndex]} & ${vis.characterNames[d.colIndex]}</b><br/>${screenTimeText}`)
-                    .style("left", (event.pageX) + "px")
-                    .style("top", (event.pageY - 28) + "px");
+                    .style("left", event.pageX + "px")
+                    .style("top", event.pageY + "px")
+                    .style("visibility", "visible");
             })
             .on("mouseout", function (event, d) {
-                vis.tooltip
-                    .style("opacity", 0);
+                vis.tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0)
+                    .end()
+                    .then(() => vis.tooltip.style("visibility", "hidden"));
             });
 
         this.createLegend();

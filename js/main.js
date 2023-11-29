@@ -230,16 +230,6 @@ loadData().then(data => {
         // relationshipMatrix.updateMatrix(selectedCharacterNames);
     });
 
-    /*
-    function handleSelectedNodes(selectedNodes) {
-        console.log('Submitted Nodes in main.js:', selectedNodes);
-        let selectedCharacterNames = selectedNodes.map(node => node.characterName);
-
-        storyline.update(selectedCharacterNames);
-        relationshipMatrix.updateMatrix(selectedCharacterNames);
-    }
-     */
-
     document.getElementById('select-node').addEventListener('click', function() {
         relationshipNetwork.submitSelectedNodes();
     });

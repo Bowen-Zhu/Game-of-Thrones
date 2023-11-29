@@ -138,12 +138,16 @@ class RelationshipNetwork {
                 Count: <b>${vis.linkCount[d.id]}</b>
                 `;
                 vis.tooltip.html(tooltipContent)
-                    .style("left", (event.pageX) + "px")
-                    .style("top", (event.pageY - 28) + "px");
+                    .style("left", event.pageX + "px")
+                    .style("top", event.pageY + "px")
+                    .style("visibility", "visible");
             })
             .on("mouseout", function (event, d) {
-                vis.tooltip
-                    .style("opacity", 0);
+                vis.tooltip.transition()
+                    .duration(500)
+                    .style("opacity", 0)
+                    .end()
+                    .then(() => vis.tooltip.style("visibility", "hidden"));
             })
             .on("click", function (event, d) {
                 if (!d.isSelected) {
