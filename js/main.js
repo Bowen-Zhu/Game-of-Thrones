@@ -239,6 +239,7 @@ loadData().then(data => {
     });
 
     const scatterplot = new Scatterplot(processedDataFull, data.deathsData, data.battlesData);
+    scatterplot.drawRelationships();
 
     document.getElementById('button1').addEventListener('click', function() {
         scatterplot.drawRelationships();
