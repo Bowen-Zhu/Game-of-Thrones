@@ -182,7 +182,7 @@ class RelationshipMatrix {
             .attr("width", legendWidth)
             .attr("height", legendHeight)
             .style("fill", "url(#gradient)")
-            .attr("transform", `translate(${vis.margin.top*4},0)`);
+            .attr("transform", `translate(${vis.margin.top*3.5},0)`);
 
         // Define a scale and axis for the legend
         let legendScale = d3.scaleLinear()
@@ -195,31 +195,9 @@ class RelationshipMatrix {
         // Append the legend axis
         vis.svg.append("g")
             .attr("class", "legend-axis")
-            .attr("transform", `translate(${vis.margin.top*4},0)`)
+            .attr("transform", `translate(${vis.margin.top*3.5},0)`)
             .call(legendAxis);
     }
-    // updateMatrix(selectedCharacterNames) {
-    //     let vis = this;
-    //
-    //     // Map the selected character names to their indices in the original array of character names
-    //     let selectedIndices = selectedCharacterNames.map(name => vis.characterNames.indexOf(name));
-    //
-    //     // Filter the matrix
-    //     let filteredMatrix = selectedIndices.map(rowIndex => {
-    //         return selectedIndices.map(colIndex => vis.matrixData[rowIndex][colIndex]);
-    //     });
-    //
-    //     // Update character names and matrix data
-    //     this.characterNames = selectedCharacterNames;
-    //     this.matrixData = filteredMatrix;
-    //
-    //     // Recalculate the maximum screen time for the new matrix
-    //     this.maxScreenTime = this.calculateMaxScreenTime();
-    //
-    //     d3.select("#" + vis.parentElement).select("svg").remove();
-    //
-    //     this.renderMatrix();
-    // }
     updateMatrix(selectedCharacterNames, isReset = false) {
         let vis = this;
 

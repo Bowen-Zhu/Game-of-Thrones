@@ -12,7 +12,7 @@ h1, h3, h5{
 }
 h1{
     background-color: rgba(47,79,79, 0.7);
-    padding: 10%;
+    padding: 5%;
     margin:10%;
     box-shadow: 0 4px 8px rgba(255, 215, 0, 0.3);
     color: gold;
@@ -54,16 +54,17 @@ h1::after {
     padding-top: 60px;
 
 }
-#relationshipStory, #networkStory, #scatterStory{
+#matrixStory, #storylineStory, #networkStory, #scatterStory, #introStory{
     padding: 60px 100px 0 100px;
     margin:5%;
 }
-.plot-text{
+.plot-text {
     background-color: rgba(47, 79, 79, 0.6);
-    margin: 3%;
     padding: 5%;
-    border-radius: 10px;
+    border-radius: 5px;
     color: lightyellow;
+    margin-top: 60px;
+    font-size: 1rem;
 }
 
 /*vertical scrolling */
@@ -160,12 +161,13 @@ h1::after {
     height: 90vh;
     width: 90vw;
     padding-bottom: 40px;
-    margin-left: 15%;
+    margin-left: 25%;
 }
 
 #network{
     height: 90vh;
     width: 90vw;
+    margin: 3%;
 }
 .modal-body{
     width: 900px;
