@@ -255,6 +255,17 @@ loadData().then(data => {
 }).catch(error => {
     console.error('Error processing data:', error.message);
 });
+$(document).ready(function () {
+    $(window).on('scroll', function () {
+        $('section').each(function () {
+            if ($(window).scrollTop() >= $(this).offset().top) {
+                var sectionId = $(this).attr('id');
+                $('.navbar-nav .nav-link, .navbar-nav .dropdown-item').removeClass('active');
+                $('.navbar-nav a[href="#' + sectionId + '"]').addClass('active');
+            }
+        });
+    });
+});
 
 
 
