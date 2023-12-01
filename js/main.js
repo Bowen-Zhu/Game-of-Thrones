@@ -215,9 +215,9 @@ loadData().then(data => {
 
     const characterNames = processedData.map(character => character.characterName);
     const storyline = new Storyline("storyline", processedData);
-    const relationshipMatrix = new RelationshipMatrix(matrix, "matrix", topN, characterNames);
+    const relationshipMatrix = new RelationshipMatrix(matrix, "matrix", characterNames);
     const relationshipNetwork = new RelationshipNetwork("network", processedData, matrix, groupedData);
-    const barchart = new Barchart(data.battlesData);
+    const barchart = new Barchart("popUp-Barchart", data.battlesData);
     barchart.createChart();
 
     document.addEventListener("nodeSelected", function(event) {
@@ -225,9 +225,9 @@ loadData().then(data => {
         console.log('Submitted Nodes in main.js:', selectedNodes);
 
         // TODO: PASS VARIABLE TO OTHER FILES
-        // let selectedCharacterNames = selectedNodes.map(node => node.characterName);
-        // storyline.update(selectedCharacterNames);
-        // relationshipMatrix.updateMatrix(selectedCharacterNames);
+        let selectedCharacterNames = selectedNodes.map(node => node.characterName);
+        storyline.update(selectedCharacterNames);
+        relationshipMatrix.updateMatrix(selectedCharacterNames);
     });
 
     document.getElementById('select-node').addEventListener('click', function() {
@@ -236,6 +236,10 @@ loadData().then(data => {
 
     document.getElementById('reload-node').addEventListener('click', function() {
         relationshipNetwork.reloadSelectedNodes();
+        relationshipMatrix.updateMatrix([], true);
+        storyline.update([]);
+
+
     });
 
     const scatterplot = new Scatterplot(processedDataFull, data.deathsData, data.battlesData);

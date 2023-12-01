@@ -1,6 +1,7 @@
 class Storyline{
     constructor(parentElement, data){
         this.parentElement = parentElement;
+        this.fullData = data; // Store the full dataset
         this.data = data;
 
         this.tooltip = d3.select("body").append("div")
@@ -12,7 +13,7 @@ class Storyline{
     renderStoryline(){
         let vis = this;
 
-        vis.margin = {top:100, right:150, bottom:50, left:50};
+        vis.margin = {top:50, right:50, bottom:100, left:60};
 
         vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
         vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.bottom - vis.margin.top;
@@ -51,7 +52,7 @@ class Storyline{
 
         vis.seasonColors = d3.scaleOrdinal()
             .domain([...new Set(vis.data.flatMap(d => d.timePeriods.map(tp => tp.seasonNum)))])
-            .range(["#d000d0", "#0077b6", "#ff70a6", "#2a9df4", "#ff6f61", "#2e8b57", "#ffd700", "#008080"]);
+            .range(["#ffffe0", "#fffacd", "#ffef96", "#ffe066", "#ffd700", "#e6c300", "#ccad00", "#d4af37"]);
 
         // Add y-axis
         vis.yAxis = d3.axisLeft(vis.yScale);
@@ -135,20 +136,30 @@ class Storyline{
                 .attr("y", 0)
                 .attr("dy", ".35em")
                 .style("text-anchor", "start")
-                .text(`Season ${season}`);
+                .text(`Season ${season}`)
+                .style("fill", "lightyellow");
         });
     }
 
-    update(selectedCharacterNames){
+    update(selectedCharacterNames = []) {
         let vis = this;
 
-        let filteredData = vis.data.filter(character => selectedCharacterNames.includes(character.characterName));
+        vis.data = selectedCharacterNames.length > 0
+            ? vis.fullData.filter(character => selectedCharacterNames.includes(character.characterName))
+            : vis.fullData;
+        // If no specific characters are selected, use the full dataset
+        let filteredData = selectedCharacterNames.length > 0
+            ? vis.data.filter(character => selectedCharacterNames.includes(character.characterName))
+            : vis.data;
 
+        // Remove the existing SVG to redraw it
         d3.select("#" + vis.parentElement).select("svg").remove();
 
+        // Update the data with either the filtered or full dataset
         vis.data = filteredData;
 
-        vis.renderStoryline()
+        // Re-render the storyline with the updated data
+        vis.renderStoryline();
     }
 
     sec(timeString){

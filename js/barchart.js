@@ -1,5 +1,6 @@
 class Barchart {
-    constructor(battlesData) {
+    constructor(parentElement, battlesData) {
+        this.parentElement = parentElement;
         this.battlesData = battlesData;
         this.kingsData = this.processData();
         this.kingsArray = this.convertToArray(this.kingsData);
@@ -54,7 +55,7 @@ class Barchart {
         const height = 500 - margin.top - margin.bottom;
 
         // Append SVG Object to the body
-        const svg = d3.select("body").append("svg")
+        const svg = d3.select("#" + this.parentElement).append("svg")
             .attr("class", "bar-chart-svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
@@ -135,8 +136,8 @@ class Barchart {
 
         // Constants for bar segments
         const barHeight = y.bandwidth() / 2;
-        const attackingColor = "#69b3a2";
-        const defendingColor = "#ffcc00";
+        const attackingColor = "#2f4f4f";
+        const defendingColor = "#FFD700";
 
         // Group each pair of attacking and defending bars
         const barGroup = svg.selectAll(".bar-group")

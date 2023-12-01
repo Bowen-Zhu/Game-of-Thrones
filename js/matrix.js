@@ -1,9 +1,10 @@
 class RelationshipMatrix {
-    constructor(matrixData, parentElement, topN, characterNames) {
+    constructor(matrixData, parentElement, characterNames) {
         this.matrixData = matrixData;
+        this.originalMatrixData = matrixData.slice().map(row => row.slice()); // Deep copy
         this.parentElement = parentElement;
-        this.topN = topN;
         this.characterNames = characterNames;
+        this.originalCharacterNames = [...characterNames]; // Shallow copy
 
         this.maxScreenTime = this.calculateMaxScreenTime();
 
@@ -17,7 +18,7 @@ class RelationshipMatrix {
     }
 
     getTimeColor(screenTime) {
-        return this.purpleScale(screenTime);
+        return this.goldScale(screenTime);
     }
 
     calculateMaxScreenTime() {
@@ -61,9 +62,9 @@ class RelationshipMatrix {
             .domain(vis.characterNames)
             .padding(0.1);
 
-        vis.purpleScale = d3.scaleLinear()
+        vis.goldScale = d3.scaleLinear()
             .domain([0, this.maxScreenTime])
-            .range(["#f2e0f7", "#d000d0"])
+            .range(["#fffff0", "#d4af37"])
             .interpolate(d3.interpolateRgb);
 
         const cellSize = vis.yScale.bandwidth();
@@ -79,7 +80,8 @@ class RelationshipMatrix {
             .attr("y", -10)
             .attr("text-anchor", "start")
             .attr("transform", (d, i) => `rotate(-90, ${cellSize * i + cellSize / 2}, -10)`)
-            .style("font-size", "8px");
+            .style("font-size", "8px")
+            .style("fill", "lightyellow");
 
         // Row labels
         vis.svg.append("g")
@@ -91,7 +93,8 @@ class RelationshipMatrix {
             .attr("x", -10)
             .attr("y", (d, i) => cellSize * i + cellSize / 2)
             .attr("text-anchor", "end")
-            .style("font-size", "8px");
+            .style("font-size", "8px")
+            .style("fill", "lightyellow");
 
         // Add matrix cells
         vis.rows = vis.svg.selectAll(".row")
@@ -112,9 +115,9 @@ class RelationshipMatrix {
             .attr("width", cellSize)
             .attr("height", cellSize)
             .style("fill", d => {
-                return vis.characterNames[d.rowIndex] === vis.characterNames[d.colIndex] ? "#f2e0f7" : this.getTimeColor(d.cellValue);
+                return vis.characterNames[d.rowIndex] === vis.characterNames[d.colIndex] ? "#ffffff" : this.getTimeColor(d.cellValue);
             })
-            .style("stroke", "white")
+            .style("stroke", "#0a0a0a")
             .style("stroke-width", "2px")
             .style("opacity", 0.9)
             .on("mouseover", function (event, d) {
@@ -135,7 +138,15 @@ class RelationshipMatrix {
                     .duration(500)
                     .style("opacity", 0)
                     .end()
-                    .then(() => vis.tooltip.style("visibility", "hidden"));
+                    .then(() => {
+                        // Ensure the transition has completed before changing the visibility
+                        if (vis.tooltip.style("opacity") === "0") {
+                            vis.tooltip.style("visibility", "hidden");
+                        }
+                    })
+                    .catch(error => {
+                        console.warn("Transition was interrupted:", error);
+                    });
             });
 
         this.createLegend();
@@ -155,8 +166,8 @@ class RelationshipMatrix {
 
         // Populate the gradient with colors from the scale
         gradient.selectAll("stop")
-            .data(vis.purpleScale.ticks().map((tick, i, nodes) => (
-                { offset: `${100*i/nodes.length}%`, color: vis.purpleScale(tick) }
+            .data(vis.goldScale.ticks().map((tick, i, nodes) => (
+                { offset: `${100*i/nodes.length}%`, color: vis.goldScale(tick) }
             )))
             .enter().append("stop")
             .attr("offset", d => d.offset)
@@ -171,7 +182,7 @@ class RelationshipMatrix {
             .attr("width", legendWidth)
             .attr("height", legendHeight)
             .style("fill", "url(#gradient)")
-            .attr("transform", `translate(0,${vis.height})`);
+            .attr("transform", `translate(${vis.margin.top*4},0)`);
 
         // Define a scale and axis for the legend
         let legendScale = d3.scaleLinear()
@@ -179,36 +190,59 @@ class RelationshipMatrix {
             .range([0, legendWidth]);
 
         let legendAxis = d3.axisTop(legendScale)
-            .ticks(5);
+            .ticks(3);
 
         // Append the legend axis
         vis.svg.append("g")
             .attr("class", "legend-axis")
-            .attr("transform", `translate(0, ${vis.height})`)
+            .attr("transform", `translate(${vis.margin.top*4},0)`)
             .call(legendAxis);
     }
-    updateMatrix(selectedCharacterNames) {
+    // updateMatrix(selectedCharacterNames) {
+    //     let vis = this;
+    //
+    //     // Map the selected character names to their indices in the original array of character names
+    //     let selectedIndices = selectedCharacterNames.map(name => vis.characterNames.indexOf(name));
+    //
+    //     // Filter the matrix
+    //     let filteredMatrix = selectedIndices.map(rowIndex => {
+    //         return selectedIndices.map(colIndex => vis.matrixData[rowIndex][colIndex]);
+    //     });
+    //
+    //     // Update character names and matrix data
+    //     this.characterNames = selectedCharacterNames;
+    //     this.matrixData = filteredMatrix;
+    //
+    //     // Recalculate the maximum screen time for the new matrix
+    //     this.maxScreenTime = this.calculateMaxScreenTime();
+    //
+    //     d3.select("#" + vis.parentElement).select("svg").remove();
+    //
+    //     this.renderMatrix();
+    // }
+    updateMatrix(selectedCharacterNames, isReset = false) {
         let vis = this;
 
-        // Map the selected character names to their indices in the original array of character names
-        let selectedIndices = selectedCharacterNames.map(name => vis.characterNames.indexOf(name));
+        if (isReset) {
+            // Reset to the original state
+            this.characterNames = this.originalCharacterNames;
+            this.matrixData = this.originalMatrixData;
+        } else {
+            let selectedIndices = selectedCharacterNames.map(name => vis.characterNames.indexOf(name));
+            let filteredMatrix = selectedIndices.map(rowIndex => {
+                return selectedIndices.map(colIndex => vis.matrixData[rowIndex][colIndex]);
+            });
 
-        // Filter the matrix
-        let filteredMatrix = selectedIndices.map(rowIndex => {
-            return selectedIndices.map(colIndex => vis.matrixData[rowIndex][colIndex]);
-        });
+            this.characterNames = selectedCharacterNames;
+            this.matrixData = filteredMatrix;
+        }
 
-        // Update character names and matrix data
-        this.characterNames = selectedCharacterNames;
-        this.matrixData = filteredMatrix;
-
-        // Recalculate the maximum screen time for the new matrix
+        // Recalculate max screen time and re-render
         this.maxScreenTime = this.calculateMaxScreenTime();
-
         d3.select("#" + vis.parentElement).select("svg").remove();
-
         this.renderMatrix();
     }
+
 
 
 }

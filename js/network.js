@@ -114,7 +114,7 @@ class RelationshipNetwork {
         vis.link = vis.link.enter().append("line")
             .attr("class", "link")
             .merge(vis.link)
-            .attr("stroke", "#999")
+            .attr("stroke", "#2f4f4f")
             .attr("stroke-opacity", 0.5);
 
         // Update nodes
@@ -126,7 +126,7 @@ class RelationshipNetwork {
             .merge(vis.node)
             .attr("r", d => 5 + Math.sqrt(vis.linkCount[d.id]) * 3)
             .attr("fill", d => vis.color(d.group))
-            .attr("stroke", "white")
+            .attr("stroke", "#2f4f4f")
             .attr("stroke-width", 1.5)
             .on("mouseover", function (event, d) {
                 vis.tooltip.transition()
@@ -162,7 +162,7 @@ class RelationshipNetwork {
                     d.isSelected = false;
                 }
                 vis.node
-                    .attr("stroke", node => node.isSelected ? "black" : "white")
+                    .attr("stroke", node => node.isSelected ? "white" : "black")
                     .attr("stroke-width", node => node.isSelected ? 2 : 1.5);
                 vis.handleNodeClick(d);
             })
@@ -257,7 +257,8 @@ class RelationshipNetwork {
                 .attr("y", vis.legendRectSize / 2)
                 .attr("dy", ".35em")
                 .style("text-anchor", "start")
-                .text(group);
+                .text(group)
+                .style("fill", "lightyellow");
         });
     }
 

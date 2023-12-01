@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="description" content="">
+    <meta charset="UTF-8"><meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bonds and Bloodshed</title>
 
+    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Neuton:300,400,400i,700,800" rel="stylesheet">
 
     <!-- CSS libraries -->
@@ -15,121 +15,164 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<nav class="navbar navbar-dark bg-dark fixed-top">
-    <div class="container-fluid">
-        <a class="navbar-brand">Bonds and Bloodshed</a>
-    </div>
-</nav>
-<div class="container">
-    <div class="row" id="intro">
-        <div class="col">
-            <div class="card">
-                <h1 class="title">Bonds and Bloodshed in the Game of Thrones</h1>
-                <div class="card-title">
-                    <h2 class="plot-title">Relationships</h2>
-                </div>
-                <div class="card-body">
-                    <div class="plot-description">
-                        To explore the nature of relationships and character interactions in Game of Thrones, scroll down.
+<header>
+    <!-- Navigation Bar-->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#intro"> Bonds & Bloodshed</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#networkStory">Network</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#networkContainer">Network Visualization</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#relationshipStory">Storyline and Matrix Story</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#matrixContainer">Matrix</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#storylineContainer">Storyline</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#scatterStory">Scatter Plot Story</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#scatterContainer">Scatter Plot</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<main class="vertical-scroll">
+    <section>
+        <div class="row align-items-stretch" id="intro">
+            <!-- Card on the far left with mx-auto for automatic margin on the x-axis -->
+            <div class="col-3 mx-auto"></div>
+
+            <div class="col-6 mx-auto">
+                <h1>Game of Thrones:<br> Bonds and Bloodshed</h1>
+            </div>
+            <!-- Card on the far right with mx-auto for automatic margin on the x-axis -->
+            <div class="col-3 mx-auto"></div>
+        </div>
+        <div class="scroll-arrow"></div>
+    </section>
+    <section id="networkStory">
+        <div class="row">
+            <h3>Placeholder for network relationship hook</h3>
+            <!--Story about relationships goes here-->
+            <p class="plot-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ligula ullamcorper malesuada proin libero nunc. Tellus id interdum velit laoreet id donec ultrices tincidunt arcu. Sit amet justo donec enim. Suspendisse interdum consectetur libero id faucibus nisl tincidunt. Sit amet nulla facilisi morbi tempus iaculis urna id volutpat. Ac ut consequat semper viverra. Sed elementum tempus egestas sed. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui. Pharetra sit amet aliquam id diam maecenas ultricies mi eget. Auctor urna nunc id cursus metus aliquam. Et malesuada fames ac turpis egestas. Feugiat in ante metus dictum at tempor commodo ullamcorper. Morbi tristique senectus et netus et malesuada fames ac. <br> Varius quam quisque id diam vel quam elementum pulvinar etiam. In aliquam sem fringilla ut morbi tincidunt augue interdum velit. Dolor sit amet consectetur adipiscing elit. Nunc lobortis mattis aliquam faucibus purus in massa. Fringilla ut morbi tincidunt augue interdum. Sed egestas egestas fringilla phasellus faucibus scelerisque. Risus ultricies tristique nulla aliquet enim tortor at auctor. Et molestie ac feugiat sed. Id consectetur purus ut faucibus. Venenatis urna cursus eget nunc. Nunc sed blandit libero volutpat sed cras ornare. Etiam sit amet nisl purus in mollis. Vestibulum lorem sed risus ultricies. </p>
+        </div>
+        <div class="scroll-arrow"></div>
+    </section>
+    <section id="networkContainer">
+        <h3>Placeholder for network relationship hook</h3>
+        <!--Network visualization goes here-->
+        <div class="network-button">
+            <button id="select-node" type="button" class="btn btn-primary">Submit</button>
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <strong class="me-auto">Warning</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Sorry, you have to submit at least three nodes. Please reload to proceed.
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="network-container">
-                <div id="network"></div>
-            </div>
-            <div class="network-buttons">
-                <button id="select-node" type="button" class="btn btn-primary">Submit</button>
-                <div class="toast-container position-fixed bottom-0 end-0 p-3">
-                    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                        <div class="toast-header">
-                            <strong class="me-auto">Warning</strong>
-                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                        </div>
-                        <div class="toast-body">
-                            Sorry, you have to submit at least four nodes. Please reload to proceed.
-                        </div>
-                    </div>
-                </div>
-                <button id="reload-node" type="button" class="btn btn-primary">Reload</button>
+        <div class="network-button">
+            <button id="reload-node" type="button" class="btn btn-primary">Reload</button>
+        </div>
+        <div class="network-container">
+            <div id="network">
+
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="card">
-                <div class="card-title">
-                    <h2 class="plot-title">Relationships and Storyline</h2>
+        <div class="scroll-arrow"></div>
+    </section>
+    <section id="relationshipStory">
+        <div class="row">
+            <h3>Placeholder for relationship story hook</h3>
+            <!--Story about relationships goes here-->
+            <p class="plot-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ligula ullamcorper malesuada proin libero nunc. Tellus id interdum velit laoreet id donec ultrices tincidunt arcu. Sit amet justo donec enim. Suspendisse interdum consectetur libero id faucibus nisl tincidunt. Sit amet nulla facilisi morbi tempus iaculis urna id volutpat. Ac ut consequat semper viverra. Sed elementum tempus egestas sed. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui. Pharetra sit amet aliquam id diam maecenas ultricies mi eget. Auctor urna nunc id cursus metus aliquam. Et malesuada fames ac turpis egestas. Feugiat in ante metus dictum at tempor commodo ullamcorper. Morbi tristique senectus et netus et malesuada fames ac. <br> Purus non enim praesent elementum facilisis leo vel. Sapien nec sagittis aliquam malesuada bibendum. Pellentesque elit eget gravida cum sociis natoque. Duis tristique sollicitudin nibh sit amet commodo. Cras ornare arcu dui vivamus arcu felis bibendum. Ullamcorper a lacus vestibulum sed arcu non odio euismod lacinia. Magna fringilla urna porttitor rhoncus dolor purus. Malesuada pellentesque elit eget gravida. Mauris nunc congue nisi vitae suscipit tellus mauris. Bibendum est ultricies integer quis auctor elit sed. Aliquam nulla facilisi cras fermentum odio. Eget est lorem ipsum dolor sit. </p>
+        </div>
+        <div class="scroll-arrow"></div>
+    </section>
+    <section id="matrixContainer">
+        <h3>Placeholder for relationship Matrix hook</h3>
+        <!--Matrix goes here-->
+        <div id="matrix">
+        </div>
+        <div class="scroll-arrow"></div>
+    </section>
+    <section id="storylineContainer">
+        <h3>Placeholder for storyline chart hook</h3>
+        <div id="storyline"></div>
+        <!--storyline goes here-->
+        <div class="scroll-arrow"></div>
+    </section>
+    <section id="scatterStory">
+        <h3>Placeholder for scatter plot hook</h3>
+        <div class="row">
+            <p class="plot-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ligula ullamcorper malesuada proin libero nunc. Tellus id interdum velit laoreet id donec ultrices tincidunt arcu. Sit amet justo donec enim. Suspendisse interdum consectetur libero id faucibus nisl tincidunt. Sit amet nulla facilisi morbi tempus iaculis urna id volutpat. Ac ut consequat semper viverra. Sed elementum tempus egestas sed. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui. Pharetra sit amet aliquam id diam maecenas ultricies mi eget. Auctor urna nunc id cursus metus aliquam.</p>
+        </div>
+        <div class="scroll-arrow"></div>
+    </section>
+
+    <section id="scatterContainer">
+        <h3>Placeholder for scatter plot hook</h3>
+        <div class="row">
+            <div class="scatterplot-buttons">
+                <button id="button1">relationships</button>
+                <button id="button2">battles involved</button>
+            </div>
+
+            <div class="scatterplots-container">
+                <div id="scatterplot"></div>
+                <button type="button" class="btn" data-toggle="modal" data-target="#kingsuccess">
+                    View King's Success Rate
+                </button>
+            </div>
+
+            <!--scatter-plot goes here-->
+        </div>
+    </section>
+    <!-- Button trigger modal -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="kingsuccess" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">King's Success Rate</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="card-body">
-                    <div class="plot-description">
-                        Explore the length of interactions between characters on screen in the matrix.<br>
-                        Scroll right or left to see more visualizations to reveal interesting trends in character appearances in different episodes. The clustering may suggest important episodes and possibly important events. You can also choose which characters you want to take a deep dive into by specifying in the network above.
-                    </div>
+                <div class="modal-body" id="popUp-Barchart">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row">
 
-
-    </div>
-    <div class="row">
-
-    </div>
-    <div class="horizontal">
-        <div class="slider">
-            <section>
-                <div class="card">
-                    <h2 class="plot-title">Relationship Matrix</h2>
-                    <div id="matrix">
-                    </div>
-
-                </div>
-            </section>
-            <section>
-                <div class="card">
-                    <h2 class="plot-title">Storyline</h2>
-                    <div class="plot-description">
-                        A visualization of when each character is on screen throughout the entire show.<br>
-                        Users proceed to explore the nature of the relationship between characters by scrolling down.
-                    </div>
-                    <div id="storyline"></div>
-                </div>
-            </section>
-        </div>
-    </div>
-
-
-    <div>
-        <!-- Placeholders -->
-        <h2 class="plot-title">Correlation between the life length and the number of ...</h2>
-        <div class="scatterplot-buttons">
-            <button id="button1">relationships</button>
-            <button id="button2">battles involved</button>
-        </div>
-        <div class="scatterplots-container">
-            <div id="scatterplot"></div>
-        </div>
-    </div>
-
-    <h2 class="plot-title">Kings' Success Rate</h2>
-    <div class="container">
-        <div id="barchart"></div>
-        <div id="tooltip" class="bar-tooltip" style="opacity:0;"></div>
-    </div>
-    <div id="popupBarchart">
-
-    </div>
-
-
-</div>
+</main>
 
 <!-- BOOTSTRAP -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 <!-- d3 -->
 <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -138,11 +181,8 @@
 <script src="https://d3js.org/d3-geo.v1.min.js"></script>
 <!--csv-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-<!-- Google Font -->
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
-
-<!-- OWN JS -->
+<!--OWN JS-->
 <script src="js/timeline.js"></script>
 <script src="js/network.js"></script>
 <script src="js/matrix.js"></script>
