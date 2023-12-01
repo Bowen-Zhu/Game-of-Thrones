@@ -2,25 +2,26 @@
 html {
     scroll-snap-type: y mandatory;
 }
+
 body {
-    font-family: "Lato", sans-serif;
     background-color: #0a0a0a;
     color: rgb(255, 215, 0);
+    font-family: 'EB Garamond', serif;
 }
+
 h1, h3, h5{
-    font-family: 'Cinzel', serif;
+    font-family: 'EB Garamond', serif;
+    font-weight: 700;
 }
-h1{
-    background-color: rgba(47,79,79, 0.7);
-    padding: 5%;
-    margin:10%;
-    box-shadow: 0 4px 8px rgba(255, 215, 0, 0.3);
-    color: gold;
+
+h1 {
     text-shadow: 1px 1px 1px #000,
     0 0 0.5em darkslategray,
     0 0 0.1em darkslategray;
-    font-size: 5rem;
+    font-size: 3rem;
+    color: gold;
 }
+
 h1::before,
 h1::after {
     content: '♔';
@@ -28,6 +29,17 @@ h1::after {
     color: lightyellow;
     padding-right: 0.5rem;
     padding-left: 0.5rem;
+}
+
+#main-title {
+    background-color: rgba(47,79,79, 0.7);
+    padding: 5%;
+    margin-top: 15%;
+    margin-bottom: 25%;
+}
+
+p {
+    font-size: 1.2rem;
 }
 
 .navbar {
@@ -54,6 +66,7 @@ h1::after {
     background-position: center;
     background-attachment: fixed;
 }
+
 #networkContainer, #matrixContainer, #storylineContainer, #scatterContainer{
     padding-top: 60px;
 
@@ -86,10 +99,15 @@ h1::after {
     text-align: center;
     position: relative;
 }
+
+section p {
+    text-align: left;
+}
+
 /* Add scroll down nudge arrow */
 .scroll-arrow {
     position: absolute;
-    bottom: 10px;
+    bottom: 3rem;
     left: 50%;
     transform: translateX(-50%);
     width: 30px;
@@ -120,6 +138,7 @@ h1::after {
     height: 100%;
     transform: skewY(140deg);
 }
+
 /* animation for nudge arrow*/
 @keyframes changeColor {
     from {
@@ -129,6 +148,7 @@ h1::after {
         background-color: transparent;
     }
 }
+
 .btn, button{
     background-color: darkslategray;
     color: lightyellow;
@@ -136,9 +156,24 @@ h1::after {
     border: none;
     margin: 5px;
 }
+
+.btn:hover, button:hover,
+.btn:active, button:active,
+.btn:focus, button:focus {
+    background-color: gold;
+    color: black;
+}
+
+.btn:disabled, button:disabled {
+    background-color: red;
+    color: white;
+}
+
 .toast-body{
     color: #0a0a0a;
+    text-align: left;
 }
+
 #storyline {
     height: 90vh;
     width: 90vw;
@@ -152,13 +187,15 @@ h1::after {
 }
 
 #network{
-    height: 90vh;
-    width: 90vw;
+    height: 70vh;
+    width: 100vw;
     margin: 3%;
 }
+
 .modal-body{
     width: 900px;
 }
+
 .matrix-tooltip, .storyline-tooltip, .network-tooltip,  .scatter-tooltip{
     position: absolute;
     width: auto;
@@ -171,6 +208,7 @@ h1::after {
     font-size: 14px;
     color: #0a0a0a;
 }
+
 .bar-tooltip {
     position: absolute;
     text-align: center;
@@ -184,10 +222,12 @@ h1::after {
     opacity: 0;
     transition: opacity 0.3s ease;
 }
+
 .bar-group:hover .bar {
-    fill: lightslategray; /* Change the fill color on hover */
+    fill: lightslategray;
     transition: fill 0.3s ease;
 }
+
 .bar-attacking:hover + .tooltip, .bar-defending:hover + .tooltip {
     opacity: 1;
 }
@@ -198,19 +238,26 @@ h1::after {
     stroke-width: 1px;
     transition: fill 0.3s ease-in-out, r 0.3s ease-in-out;
 }
+
 .dot:hover {
-    fill: lightyellow;  /* Change color on hover */
-    r: 10px;        /* Increase radius on hover */
+    fill: lightyellow;
+    r: 10px;
 }
+
 .dot-selected {
-    fill: #fff;      /* White center */
-    stroke: #ff6347; /* Original edge color */
+    fill: #fff;
+    stroke: #ff6347;
     stroke-width: 3px;
 }
 
 .axis{
     color: lightyellow;
 }
+
+.axis-text {
+    font-family: 'EB Garamond', serif;
+}
+
 .modal{
     color: darkslategray;
 }

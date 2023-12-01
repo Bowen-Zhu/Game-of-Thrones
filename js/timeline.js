@@ -60,7 +60,9 @@ class Storyline{
         vis.svg.append("g")
             .attr("class", "axis y-axis")
             .attr("transform", `translate(${vis.margin.left + 10}, 0)`)
-            .call(vis.yAxis);
+            .call(vis.yAxis)
+            .selectAll(".tick text")
+            .attr("class", "axis-text");
 
         vis.data.forEach(character => {
             //bind the timePeriod data
