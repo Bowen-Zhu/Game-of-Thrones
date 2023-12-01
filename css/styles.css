@@ -170,7 +170,7 @@ h1::after {
 .modal-body{
     width: 900px;
 }
-.matrix-tooltip, .storyline-tooltip, .network-tooltip, .bar-tooltip, .scatter-tooltip{
+.matrix-tooltip, .storyline-tooltip, .network-tooltip,  .scatter-tooltip{
     position: absolute;
     width: auto;
     height: auto;
@@ -182,8 +182,22 @@ h1::after {
     font-size: 14px;
     color: #0a0a0a;
 }
+.bar-tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    pointer-events: none;
+    box-shadow: 0px 0px 10px #aaa;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
 .bar-group:hover .bar {
     fill: lightslategray; /* Change the fill color on hover */
+    transition: fill 0.3s ease;
 }
 .bar-attacking:hover + .tooltip, .bar-defending:hover + .tooltip {
     opacity: 1;

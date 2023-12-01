@@ -126,8 +126,8 @@ class Barchart {
             // Set the content and position of the tooltip
             const htmlContent = generateTooltipContent(d);
             tooltip.html(htmlContent)
-                .style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 28) + "px");
+                .style("left", (event.pageX + 10 - 200) + "px")
+                .style("top", (event.pageY - 28 - 6500) + "px");    // -200 and -6500 is temporary fix
         };
 
         const mouseout = function(d) {
