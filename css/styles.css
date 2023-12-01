@@ -196,7 +196,7 @@ h1::after {
     transition: opacity 0.3s ease;
 }
 .bar-group:hover .bar {
-    fill: lightslategray; /* Change the fill color on hover */
+    fill: #ff7f50; /* Change the fill color on hover */
     transition: fill 0.3s ease;
 }
 .bar-attacking:hover + .tooltip, .bar-defending:hover + .tooltip {
@@ -213,6 +213,12 @@ h1::after {
     fill: lightyellow;  /* Change color on hover */
     r: 10px;        /* Increase radius on hover */
 }
+.dot-selected {
+    fill: #fff;      /* White center */
+    stroke: #ff6347; /* Original edge color */
+    stroke-width: 3px;
+}
+
 .axis{
     color: lightyellow;
 }

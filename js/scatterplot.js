@@ -315,7 +315,7 @@ class Scatterplot {
             .style("opacity", .9);
         // this.tooltip.html(`Character: ${d.name}<br>${this.currentPlotType}: ${d.count}<br>Death: Book ${d.bookOfDeath}, Chapter ${d.deathChapter}`)
         this.tooltip.html(`Character: ${d.name}<br>${this.currentPlotType}: ${d.count}<br>Intro: Book ${d.introBook}, Chapter ${d.introChapter}<br>Death: Book ${d.bookOfDeath || 'N/A'}, Chapter ${d.deathChapter || 'N/A'}<br>Survived Chapters: ${d.survivedChapters}`)
-            .style("left", (event.pageX + 10) + "px") // +10 to prevent the tooltip from blocking the dot itself
+            .style("left", (event.pageX + 15) + "px") // +15 to prevent the tooltip from blocking the dot itself
             .style("top", (event.pageY - 28) + "px");
     }
 
