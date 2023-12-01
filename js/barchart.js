@@ -120,14 +120,18 @@ class Barchart {
 
                 return html;
             }
+            const modalRect = document.getElementById('kingsuccess').getBoundingClientRect();
 
+            // Calculate position relative to the modal
+            const relativeX = event.clientX - modalRect.left;
+            const relativeY = event.clientY - modalRect.top;
 
             tooltip.style("opacity", 1);
-            // Set the content and position of the tooltip
             const htmlContent = generateTooltipContent(d);
             tooltip.html(htmlContent)
-                .style("left", (event.pageX + 10 - 200) + "px")
-                .style("top", (event.pageY - 28 - 6500) + "px");    // -200 and -6500 is temporary fix
+                .style("left", (relativeX + 10) + "px")
+                .style("top", (relativeY - 100) + "px");
+
         };
 
         const mouseout = function(d) {

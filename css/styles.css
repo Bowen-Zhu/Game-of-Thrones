@@ -196,7 +196,7 @@ h1::after {
     transition: opacity 0.3s ease;
 }
 .bar-group:hover .bar {
-    fill: #ff7f50; /* Change the fill color on hover */
+    fill: lightslategray; /* Change the fill color on hover */
     transition: fill 0.3s ease;
 }
 .bar-attacking:hover + .tooltip, .bar-defending:hover + .tooltip {
