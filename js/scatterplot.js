@@ -53,7 +53,8 @@ class Scatterplot {
         this.svg.append("text")
             .attr("transform", `translate(${this.width/2}, ${this.height + this.margin.top + 20})`)
             .style("text-anchor", "middle")
-            .text(`Number of ${this.currentPlotType}`);
+            .text(`Number of ${this.currentPlotType}`)
+            .style("fill", "gold");
 
         this.svg.append("g")
             .call(d3.axisLeft(this.y));
@@ -65,7 +66,8 @@ class Scatterplot {
             .attr("x", 0 - (this.height / 2))
             .attr("dy", "1em")
             .style("text-anchor", "middle")
-            .text("Survived Chapters");
+            .text("Survived Chapters")
+            .style("fill", "gold");
 
         // Initialize the tooltip
         this.tooltip = d3.select("body").append("div")
@@ -89,7 +91,8 @@ class Scatterplot {
         this.svg.append("text")
             .attr("transform", `translate(${this.width/2}, ${this.height + this.margin.top + 20})`)
             .style("text-anchor", "middle")
-            .text(`Number of ${this.currentPlotType}`);
+            .text(`Number of ${this.currentPlotType}`)
+            .style("fill", "gold");
 
         this.svg.append("g")
             .call(d3.axisLeft(this.y));
@@ -101,7 +104,8 @@ class Scatterplot {
             .attr("x", 0 - (this.height / 2))
             .attr("dy", "1em")
             .style("text-anchor", "middle")
-            .text("Survived Chapters");
+            .text("Survived Chapters")
+            .style("fill", "gold");
 
     }
 
