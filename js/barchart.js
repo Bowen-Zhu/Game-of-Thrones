@@ -82,7 +82,15 @@ class Barchart {
                 const svgWidth = barWidth * 3 + spacing * 4;
                 const labelOffset = 20;
 
-                let html = `<strong>${d.king}</strong><br><br><svg width="${svgWidth}" height="${barHeight + labelOffset * 2}">`;
+                const titleHtml = `<strong style="padding-left: 50px; font-size: 18px;">${d.king}</strong><br><br><svg width="${svgWidth}" height="${barHeight + labelOffset * 2}">`;
+
+                // Add legend in tooltip
+                const legendHtml = `
+                    <div style="float: right; clear: both; text-align: right; margin-top: 5px;">
+                        <div><svg width="10" height="10" style="background-color: green;"></svg> Wins&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <div><svg width="10" height="10" style="background-color: red;"></svg> Losses&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                    </div>`;
+                let html = legendHtml + titleHtml;
 
                 // Function to create a bar and its labels
                 const createBar = (x, wins, losses) => {
@@ -208,5 +216,44 @@ class Barchart {
         // Add the Y Axis
         svg.append("g")
             .call(d3.axisLeft(y));
+
+        // Add Legend at the upper right side
+        const legendX = width - 30;
+        const legendY = 30;
+        const legend = svg.append("g")
+            .attr("class", "legend")
+            .attr("transform", `translate(${legendX}, ${legendY})`);
+
+        // Add green rectangle for wins
+        legend.append("rect")
+            .attr("x", -5)
+            .attr("y", -5)
+            .attr("width", 20)
+            .attr("height", 20)
+            .style("fill", "darkslategray");
+
+        // Add yellow rectangle for losses
+        legend.append("rect")
+            .attr("x", -5)
+            .attr("y", 25)
+            .attr("width", 20)
+            .attr("height", 20)
+            .style("fill", "gold");
+
+        // Add text label for wins
+        legend.append("text")
+            .attr("x", 20)
+            .attr("y", 10)
+            .text("Wins")
+            .style("fill", "darkslategray")
+            .attr("font-size", "15px");
+
+        // Add text label for losses
+        legend.append("text")
+            .attr("x", 20)
+            .attr("y", 40)
+            .text("Losses")
+            .style("fill", "darkslategray")
+            .attr("font-size", "15px");
     }
 }
