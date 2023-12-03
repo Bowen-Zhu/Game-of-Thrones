@@ -28,8 +28,8 @@ class Scatterplot {
         this.data = this.prepareDataLinks();
 
         this.margin = { top: 10, right: 30, bottom: 40, left: 60 };
-        this.width = 600 - this.margin.left - this.margin.right;
-        this.height = 400 - this.margin.top - this.margin.bottom;
+        this.width = document.getElementById("scatterplot").getBoundingClientRect().width - this.margin.left - this.margin.right;
+        this.height = document.getElementById("scatterplot").getBoundingClientRect().height - this.margin.top - this.margin.bottom;
 
         this.svg = d3.select("#scatterplot")
             .append("svg")

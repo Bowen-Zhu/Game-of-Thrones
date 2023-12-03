@@ -64,7 +64,7 @@ class RelationshipMatrix {
 
         vis.goldScale = d3.scaleLinear()
             .domain([0, this.maxScreenTime])
-            .range(["#fffff0", "#d4af37"])
+            .range(["#FFF8DC", "#8B4513"])
             .interpolate(d3.interpolateRgb);
 
         const cellSize = vis.yScale.bandwidth();
@@ -80,7 +80,7 @@ class RelationshipMatrix {
             .attr("y", -10)
             .attr("text-anchor", "start")
             .attr("transform", (d, i) => `rotate(-90, ${cellSize * i + cellSize / 2}, -10)`)
-            .style("font-size", "8px")
+            .style("font-size", "10px")
             .style("fill", "lightyellow");
 
         // Row labels
@@ -93,7 +93,7 @@ class RelationshipMatrix {
             .attr("x", -10)
             .attr("y", (d, i) => cellSize * i + cellSize / 2)
             .attr("text-anchor", "end")
-            .style("font-size", "8px")
+            .style("font-size", "10px")
             .style("fill", "lightyellow");
 
         // Add matrix cells
@@ -115,11 +115,11 @@ class RelationshipMatrix {
             .attr("width", cellSize)
             .attr("height", cellSize)
             .style("fill", d => {
-                return vis.characterNames[d.rowIndex] === vis.characterNames[d.colIndex] ? "#ffffff" : this.getTimeColor(d.cellValue);
+                return vis.characterNames[d.rowIndex] === vis.characterNames[d.colIndex] ? "#FFF8DC" : this.getTimeColor(d.cellValue);
             })
             .style("stroke", "#0a0a0a")
             .style("stroke-width", "2px")
-            .style("opacity", 0.9)
+            .style("opacity", 1)
             .on("mouseover", function (event, d) {
                 vis.tooltip.transition()
                     .duration(200)

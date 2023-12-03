@@ -108,7 +108,7 @@ p {
 /* Add scroll down nudge arrow */
 .scroll-arrow {
     position: absolute;
-    bottom: 3rem;
+    bottom: 1rem;
     left: 50%;
     transform: translateX(-50%);
     width: 30px;
@@ -176,14 +176,14 @@ p {
 }
 
 #storyline {
-    height: 90vh;
+    height: 80vh;
     width: 90vw;
 }
 
 #matrix{
     height: 90vh;
     width: 90vw;
-    padding-bottom: 40px;
+    margin-top: -50px;
     margin-left: 25%;
 }
 
@@ -191,6 +191,11 @@ p {
     height: 70vh;
     width: 100vw;
     margin: 3%;
+}
+#scatterplot{
+    height: 60vh;
+    width: 70vw;
+    margin-left: 15%;
 }
 
 .modal-body{
