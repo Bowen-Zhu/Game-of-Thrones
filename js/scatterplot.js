@@ -111,6 +111,46 @@ class Scatterplot {
             .text("Survived Chapters")
             .style("fill", "gold");
 
+        // Add legend
+        const legend = this.svg.append("g")
+            .attr("class", "legend")
+            .attr("transform", `translate(${this.width - 100}, -5)`);
+
+        // Add a legend box
+        legend.append("rect")
+            .attr("x", -3)
+            .attr("y", -3)
+            .attr("width", 110)
+            .attr("height", 45)
+            .style("fill", "black")
+            .style("stroke", "gold")    // Border for the legend box
+            .style("stroke-width", "1px");
+
+        // Add pink dot
+        legend.append("circle")
+            .attr("class", "dot-highlighted")
+            .attr("r", 6)
+            .attr("cx", 8)
+            .attr("cy", 18);
+
+        // Add legend text
+        const legendText = legend.append("text")
+            .attr("x", 20)
+            .attr("y", -2)
+            .style("font-size", "14px")
+            .style("fill", "gold");
+
+        // First line of text
+        legendText.append("tspan")
+            .attr("x", 20)
+            .attr("dy", "1.2em")
+            .text("The Characters");
+
+        // Second line of text
+        legendText.append("tspan")
+            .attr("x", 20)
+            .attr("dy", "1.2em")
+            .text("You Selected");
     }
 
     wrangleDataLinks(data) {
