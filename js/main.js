@@ -269,95 +269,15 @@ $(document).ready(function () {
             }
         });
     });
+    $('.scroll-arrow').click(function() {
+        var nextSection = $(this).closest('section').next('section');
+        if (nextSection.length) {
+            $('html, body').animate({
+                scrollTop: nextSection.offset().top
+            }, 100);
+        } else {
+            console.log("No next section found");
+        }
+    });
+
 });
-
-
-
-
-// Test transition
-// if (!window.location.hash) {
-//     window.location.hash = "#firstPage";
-// }
-// // Show the page corresponding to the current hash
-// if (window.location.hash === "#firstPage") {
-//     document.getElementById('firstPage').style.display = 'block';
-// } else if (window.location.hash === "#secondPage") {
-//     document.getElementById('secondPage').style.display = 'block';
-// } else if (window.location.hash === "#thirdPage") {
-//     document.getElementById('thirdPage').style.display = 'block';
-// }
-//
-// let lastScrollTop = 0;
-// let cumulativeScroll = 0;
-// const scrollThreshold = 30;
-//
-// window.addEventListener("wheel", function(event) {
-//     console.log(window.location.hash);
-//     var currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-//
-//     if (event.deltaY > 0) { // Scrolling down
-//         cumulativeScroll += currentScrollTop - lastScrollTop;
-//     } else { // Scrolling up
-//         cumulativeScroll -= lastScrollTop - currentScrollTop;
-//     }
-//
-//     lastScrollTop = currentScrollTop;
-//     console.log(cumulativeScroll);
-//     console.log();
-//
-//     // Check for scroll threshold and current page
-//     if (cumulativeScroll >= scrollThreshold) {
-//         // Scrolling down, transition to the next page
-//         transitionToNextPage();
-//         cumulativeScroll = 0; // Reset the scroll accumulation
-//         console.log("Next");
-//     } else if (cumulativeScroll <= -scrollThreshold) {
-//         // Scrolling up, transition to the previous page
-//         transitionToPreviousPage();
-//         cumulativeScroll = 0; // Reset the scroll accumulation
-//         console.log("Previous");
-//     }
-// });
-//
-// function transitionToNextPage() {
-//     switch (window.location.hash) {
-//         case "#firstPage":
-//             window.location.hash = "#secondPage";
-//             break;
-//         case "#secondPage":
-//             window.location.hash = "#thirdPage";
-//             break;
-//     }
-// }
-//
-// function transitionToPreviousPage() {
-//     switch (window.location.hash) {
-//         case "#secondPage":
-//             window.location.hash = "#firstPage";
-//             break;
-//         case "#thirdPage":
-//             window.location.hash = "#secondPage";
-//             break;
-//     }
-// }
-//
-// window.addEventListener("hashchange", handleHashChange);
-//
-// function handleHashChange() {
-//     var hash = window.location.hash;
-//     var pages = document.querySelectorAll('.page');
-//
-//     // Hide all pages
-//     pages.forEach(function(page) {
-//         page.style.display = 'none';
-//     });
-//
-//     // Show the page corresponding to the current hash
-//     if (hash === "#firstPage") {
-//         document.getElementById('firstPage').style.display = 'block';
-//     } else if (hash === "#secondPage") {
-//         document.getElementById('secondPage').style.display = 'block';
-//     } else if (hash === "#thirdPage") {
-//         document.getElementById('thirdPage').style.display = 'block';
-//     }
-// }

@@ -150,7 +150,7 @@ p {
     }
 }
 
-.btn, button{
+.btn{
     background-color: darkslategray;
     color: lightyellow;
     border-radius: 5px;
@@ -251,7 +251,7 @@ p {
 
 .dot-selected {
     fill: #fff;
-    stroke: #ff6347;
+    stroke: coral;
     stroke-width: 3px;
 }
 
