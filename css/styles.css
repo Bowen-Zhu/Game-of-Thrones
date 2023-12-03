@@ -250,6 +250,12 @@ section p {
     stroke-width: 3px;
 }
 
+.dot-highlighted {
+    fill: pink;
+    stroke: #fff;
+    stroke-width: 1px;
+}
+
 .axis{
     color: lightyellow;
 }

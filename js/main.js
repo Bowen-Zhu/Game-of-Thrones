@@ -217,6 +217,9 @@ loadData().then(data => {
     const storyline = new Storyline("storyline", processedData);
     const relationshipMatrix = new RelationshipMatrix(matrix, "matrix", characterNames);
     const relationshipNetwork = new RelationshipNetwork("network", processedData, matrix, groupedData);
+
+    const scatterplot = new Scatterplot(processedDataFull, data.deathsData, data.battlesData);
+    scatterplot.drawRelationships();
     const barchart = new Barchart("popUp-Barchart", data.battlesData);
     barchart.createChart();
 
@@ -228,6 +231,8 @@ loadData().then(data => {
         let selectedCharacterNames = selectedNodes.map(node => node.characterName);
         storyline.update(selectedCharacterNames);
         relationshipMatrix.updateMatrix(selectedCharacterNames);
+        scatterplot.selectedCharacterNames = selectedCharacterNames;
+        scatterplot.highlight();
     });
 
     document.getElementById('select-node').addEventListener('click', function() {
@@ -238,19 +243,18 @@ loadData().then(data => {
         relationshipNetwork.reloadSelectedNodes();
         relationshipMatrix.updateMatrix([], true);
         storyline.update([]);
-
-
+        scatterplot.selectedCharacterNames = [];
+        scatterplot.highlight();
     });
-
-    const scatterplot = new Scatterplot(processedDataFull, data.deathsData, data.battlesData);
-    scatterplot.drawRelationships();
 
     document.getElementById('button1').addEventListener('click', function() {
         scatterplot.drawRelationships();
+        scatterplot.highlight();
     });
 
     document.getElementById('button2').addEventListener('click', function() {
         scatterplot.drawBattles();
+        scatterplot.highlight();
     });
 }).catch(error => {
     console.error('Error processing data:', error.message);

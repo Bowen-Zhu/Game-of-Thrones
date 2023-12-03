@@ -6,6 +6,10 @@ class Scatterplot {
         this.currentPlotType = 'Links';  // 'Links' or 'Battles'
         // Initialize clicked tooltip state
         this.clickedTooltipData = null;
+        // Store the highlighted dots
+        this.selectedCharacterNames = [];
+        // Store the highlighted dot that is selected, to be re-highlighted when unselected
+        this.setHighlighted = null;
         // Bind event handlers
         this.mouseover = this.mouseover.bind(this);
         this.mouseleave = this.mouseleave.bind(this);
@@ -313,6 +317,12 @@ class Scatterplot {
             d3.selectAll('.dot').classed('dot-selected', false);
 
             this.clickedTooltipData = null;
+
+            if (this.setHighlighted) {
+                // re-highlight
+                this.setHighlighted.classed('dot-highlighted', true);
+                this.setHighlighted = null;
+            }
         }
         this.tooltip.transition()
             .duration(200)
@@ -338,6 +348,10 @@ class Scatterplot {
         // Set the clicked dot as the new selected dot
         this.clickedTooltipData = d;
         d3.select(event.target).classed('dot-selected', true);
+        if (d3.select(event.target).classed('dot-highlighted')) {
+            this.setHighlighted = d3.select(event.target);
+            d3.select(event.target).classed('dot-highlighted', false);
+        }
 
         this.mouseover(event, d);
         event.stopPropagation();
@@ -347,6 +361,13 @@ class Scatterplot {
         if (this.clickedTooltipData) {
             // Remove 'selected' class when clicking outside
             d3.selectAll('.dot').classed('dot-selected', false);
+
+            if (this.setHighlighted) {
+                // re-highlight
+                this.setHighlighted.classed('dot-highlighted', true);
+                this.setHighlighted = null;
+            }
+
             this.clickedTooltipData = null;
             this.tooltip.style("opacity", 0);
         }
@@ -373,5 +394,17 @@ class Scatterplot {
             .on("mouseover", this.mouseover)
             .on("mouseleave", this.mouseleave)
             .on("click", this.clickDot);
+    }
+
+    highlight() {
+        // Reset any previously highlighted dots
+        this.svg.selectAll('.dot').classed('dot-highlighted', false);
+
+        // Highlight dots based on the provided names
+        this.selectedCharacterNames.forEach(name => {
+            this.svg.selectAll('.dot')
+                .filter(d => d.name === name)
+                .classed('dot-highlighted', true);
+        });
     }
 }
