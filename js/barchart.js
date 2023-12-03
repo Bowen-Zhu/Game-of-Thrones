@@ -87,8 +87,8 @@ class Barchart {
                 // Add legend in tooltip
                 const legendHtml = `
                     <div style="float: right; clear: both; text-align: right; margin-top: 5px;">
-                        <div><svg width="10" height="10" style="background-color: green;"></svg> Wins&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-                        <div><svg width="10" height="10" style="background-color: red;"></svg> Losses&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <div><svg width="10" height="10" style="background-color: teal;"></svg> Wins&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        <div><svg width="10" height="10" style="background-color: coral;"></svg> Losses&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
                     </div>`;
                 let html = legendHtml + titleHtml;
 
@@ -100,8 +100,8 @@ class Barchart {
                     const winsY = barHeight - winsHeight;
                     const lossesY = winsY - lossesHeight; // Position losses above wins
 
-                    let barHtml = `<rect width="${barWidth}" height="${winsHeight}" fill="green" x="${x}" y="${winsY}"></rect>` +
-                        `<rect width="${barWidth}" height="${lossesHeight}" fill="red" x="${x}" y="${lossesY}"></rect>`;
+                    let barHtml = `<rect width="${barWidth}" height="${winsHeight}" fill="teal" x="${x}" y="${winsY}"></rect>` +
+                        `<rect width="${barWidth}" height="${lossesHeight}" fill="coral" x="${x}" y="${lossesY}"></rect>`;
 
                     // Add text labels for wins and losses
                     if (wins > 0) {
