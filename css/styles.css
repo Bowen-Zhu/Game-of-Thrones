@@ -176,8 +176,9 @@ p {
 }
 
 #storyline {
-    height: 80vh;
+    height: 90vh;
     width: 100vw;
+    margin-top: -40px;
 }
 
 #matrix{
@@ -229,7 +230,7 @@ p {
 }
 
 .bar-group:hover .bar {
-    fill: lightslategray;
+    fill: coral;
     transition: fill 0.3s ease;
 }
 

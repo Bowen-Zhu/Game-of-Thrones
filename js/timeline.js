@@ -79,6 +79,18 @@ class Storyline{
                 .attr("stroke", "lightyellow")
                 .attr("stroke-width", 0.5)
                 .attr("transform", `translate(${vis.margin.left + 10}, 0)`);
+
+            let titleX = seasonBoundaries[season].start + (seasonBoundaries[season].end - seasonBoundaries[season].start) / 2;
+
+            // Draw the title above the rectangle
+            vis.svg.append("text")
+                .attr("class", "season-title")
+                .attr("x", titleX)
+                .attr("y", -5)
+                .attr("text-anchor", "middle")
+                .attr("fill", "lightyellow")
+                .text(season)
+                .attr("transform", `translate(${vis.margin.left + 10}, 0)`);
         });
 
         vis.seasonColors = d3.scaleOrdinal()
@@ -133,47 +145,7 @@ class Storyline{
                         .style("opacity", 0);
                 });
         });
-        vis.createLegend()
-
     }
-    createLegend() {
-        let vis = this;
-
-        // Legend setup
-        const legendMargin = { top: 30, right: 5, bottom: 10, left: 5 };
-        const legendRectSize = 18;
-        const legendSpacing = 40;
-
-        // Create legend SVG
-        const legendSvg = vis.svg.append("g")
-            .attr("class", "legend")
-            .attr("transform", `translate(0, ${-legendMargin.top})`);
-
-        // Draw legend entries
-        vis.seasonColors.domain().forEach((season, index) => {
-            const legendItem = legendSvg.append("g")
-                .attr("class", "legend-item")
-                .attr("transform", `translate(${index * legendSpacing}, 0)`);
-
-            // Draw colored rectangle
-            legendItem.append("rect")
-                .attr("x", legendRectSize*(index*4))
-                .attr("y", -10)
-                .attr("width", legendRectSize)
-                .attr("height", legendRectSize)
-                .style("fill", vis.seasonColors(season));
-
-            // Add text label
-            legendItem.append("text")
-                .attr("x", legendRectSize*(index*4)+20)
-                .attr("y", 0)
-                .attr("dy", ".35em")
-                .style("text-anchor", "start")
-                .text(`Season ${season}`)
-                .style("fill", "lightyellow");
-        });
-    }
-
     update(selectedCharacterNames = []) {
         let vis = this;
 
@@ -188,7 +160,7 @@ class Storyline{
         // Remove the existing SVG to redraw it
         d3.select("#" + vis.parentElement).select("svg").remove();
 
-        // Update the data with either the filtered or full dataset
+        // Update the data
         vis.data = filteredData;
 
         // Re-render the storyline with the updated data
