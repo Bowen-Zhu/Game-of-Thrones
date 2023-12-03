@@ -50,6 +50,37 @@ class Storyline{
             .range([0, vis.width])
             .domain([0, totalDuration]);
 
+        let seasonBoundaries = {};
+        vis.data.forEach(character => {
+            character.timePeriods.forEach(period => {
+                let seasonKey = `Season ${period.seasonNum}`;
+                let key = `S${period.seasonNum}E${period.episodeNum}`;
+                let xStart = vis.xScale(cumulativeDurations[key] + this.sec(period.sceneStart));
+                let xEnd = vis.xScale(cumulativeDurations[key] + this.sec(period.sceneEnd));
+
+                if (!seasonBoundaries[seasonKey]) {
+                    seasonBoundaries[seasonKey] = { start: xStart, end: xEnd };
+                } else {
+                    seasonBoundaries[seasonKey].start = Math.min(seasonBoundaries[seasonKey].start, xStart);
+                    seasonBoundaries[seasonKey].end = Math.max(seasonBoundaries[seasonKey].end, xEnd);
+                }
+            });
+        });
+
+        // Draw season rectangles
+        Object.keys(seasonBoundaries).forEach(season => {
+            vis.svg.append("rect")
+                .attr("class", "season-rect")
+                .attr("x", seasonBoundaries[season].start)
+                .attr("y", 0)
+                .attr("width", seasonBoundaries[season].end - seasonBoundaries[season].start)
+                .attr("height", vis.height)
+                .attr("fill", "none")
+                .attr("stroke", "lightyellow")
+                .attr("stroke-width", 0.5)
+                .attr("transform", `translate(${vis.margin.left + 10}, 0)`);
+        });
+
         vis.seasonColors = d3.scaleOrdinal()
             .domain([...new Set(vis.data.flatMap(d => d.timePeriods.map(tp => tp.seasonNum)))])
             .range(["#ffffe0", "#fffacd", "#ffef96", "#ffe066", "#ffd700", "#e6c300", "#ccad00", "#d4af37"]);
