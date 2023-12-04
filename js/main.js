@@ -294,5 +294,12 @@ $(document).ready(function () {
             console.log("No next section found");
         }
     });
+    $('.animated-text').each(function(i) {
+        // Delay in milliseconds, adjust as needed
+        var delay = 2500 * (i + 1);
+        $(this).delay(delay).queue(function() {
+            $(this).addClass('visible').dequeue();
+        });
+    });
 
 });
