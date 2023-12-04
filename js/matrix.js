@@ -42,7 +42,7 @@ class RelationshipMatrix {
     renderMatrix() {
         let vis = this;
 
-        vis.margin = {top: 150, right: 50, bottom: 50, left: 150};
+        vis.margin = {top: 100, right: 50, bottom: 50, left: 150};
 
         vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
         vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.top - vis.margin.bottom;
@@ -186,7 +186,7 @@ class RelationshipMatrix {
             .attr("width", legendWidth)
             .attr("height", legendHeight)
             .style("fill", "url(#gradient)")
-            .attr("transform", `translate(${vis.margin.top*5},0)`);
+            .attr("transform", `translate(${vis.margin.left*5},0)`);
 
         // Define a scale and axis for the legend
         let legendScale = d3.scaleLinear()
@@ -199,7 +199,7 @@ class RelationshipMatrix {
         // Append the legend axis
         vis.svg.append("g")
             .attr("class", "legend-axis")
-            .attr("transform", `translate(${vis.margin.top*5},0)`)
+            .attr("transform", `translate(${vis.margin.left*5},0)`)
             .call(legendAxis);
     }
     updateMatrixBasedOnGroup(groupName) {

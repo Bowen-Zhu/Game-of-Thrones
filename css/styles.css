@@ -212,7 +212,8 @@ select{
 #scatterplot{
     height: 60vh;
     width: 70vw;
-    margin-left: 15%;
+    transform: translateX(20%);
+    margin: 2%;
 }
 
 .modal-body{
@@ -279,7 +280,7 @@ select{
     stroke-width: 1px;
 }
 
-.axis{
+.axis, .legend-axis{
     color: lightyellow;
 }
 
