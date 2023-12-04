@@ -139,7 +139,7 @@ class RelationshipMatrix {
             })
             .on("mouseout", function (event, d) {
                 vis.tooltip.transition()
-                    .duration(500)
+                    .duration(200)
                     .style("opacity", 0)
                     .end()
                     .then(() => {
@@ -201,6 +201,15 @@ class RelationshipMatrix {
             .attr("class", "legend-axis")
             .attr("transform", `translate(${vis.margin.left*5},0)`)
             .call(legendAxis);
+
+        // Add a title for the legend
+        vis.svg.append("text")
+            .attr("class", "legend-title")
+            .attr("x", vis.margin.left*5)
+            .attr("y", -30)
+            .text("Shared Screen Time (seconds)")
+            .style("font-size", "15px")
+            .style("fill", "lightyellow");
     }
     updateMatrixBasedOnGroup(groupName) {
         this.currentGroupFilter = groupName;
