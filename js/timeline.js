@@ -8,12 +8,15 @@ class Storyline{
             .attr("class", "storyline-tooltip")
             .style("opacity", 0);
 
+        this.yScale = d3.scaleBand().range([0, 0]).domain([]);
+        this.xScale = d3.scaleLinear().range([0, 0]).domain([0, 0]);
+
         this.update();
     }
     renderStoryline(){
         let vis = this;
 
-        vis.margin = {top:50, right:50, bottom:100, left:60};
+        vis.margin = {top:50, right:50, bottom:100, left:100};
 
         vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
         vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.bottom - vis.margin.top;
@@ -25,14 +28,10 @@ class Storyline{
             .attr("transform", `translate(${vis.margin.left}, ${vis.margin.top})`);
 
         //define scales
-        vis.yScale = d3.scaleBand()
-            .range([vis.height, 0])
-            .domain(vis.data.map(d => d.characterName))
-            .padding(0.1);
+        vis.yScale.range([vis.height, 0]).padding(0.1);
 
-        vis.xScale = d3.scaleLinear()
-            .range([0, vis.width])
-            .domain([0, vis.totalDuration]);
+        vis.xScale.range([0, vis.width])
+
 
         let seasonBoundaries = {};
         vis.data.forEach(character => {
@@ -61,8 +60,7 @@ class Storyline{
                 .attr("height", vis.height)
                 .attr("fill", "none")
                 .attr("stroke", "lightyellow")
-                .attr("stroke-width", 0.5)
-                .attr("transform", `translate(${vis.margin.left + 10}, 0)`);
+                .attr("stroke-width", 0.5);
 
             let titleX = seasonBoundaries[season].start + (seasonBoundaries[season].end - seasonBoundaries[season].start) / 2;
 
@@ -73,8 +71,7 @@ class Storyline{
                 .attr("y", -5)
                 .attr("text-anchor", "middle")
                 .attr("fill", "lightyellow")
-                .text(season)
-                .attr("transform", `translate(${vis.margin.left + 10}, 0)`);
+                .text(season);
         });
 
         vis.seasonColors = d3.scaleOrdinal()
@@ -86,7 +83,6 @@ class Storyline{
 
         vis.svg.append("g")
             .attr("class", "axis y-axis")
-            .attr("transform", `translate(${vis.margin.left + 10}, 0)`)
             .call(vis.yAxis)
             .selectAll(".tick text")
             .attr("class", "axis-text");
@@ -107,7 +103,6 @@ class Storyline{
                 .attr("y", d => vis.yScale(character.characterName))
                 .attr("width", d => vis.xScale(this.sec(d.sceneEnd)) - vis.xScale(this.sec(d.sceneStart)))
                 .attr("height", vis.yScale.bandwidth())
-                .attr("transform", `translate(${vis.margin.left + 10}, 0)`)
                 .attr("fill", d => vis.seasonColors(d.seasonNum))
                 .attr("opacity", 0.8)
                 .on("mouseover", function (event, d) {
@@ -141,19 +136,23 @@ class Storyline{
             ? vis.data.filter(character => selectedCharacterNames.includes(character.characterName))
             : vis.data;
 
-        // Remove the existing SVG to redraw it
-        d3.select("#" + vis.parentElement).select("svg").remove();
+        d3.select("#" + vis.parentElement).select("svg");
 
         // Update the data
         vis.data = filteredData;
 
         vis.wrangleData();
 
-
     }
-    wrangleData (){
+    wrangleData() {
         let vis = this;
+
+        // Reset episode durations and cumulative durations
         vis.episodeDurations = {};
+        vis.cumulativeDurations = {};
+        vis.totalDuration = 0;
+
+        // Compute episode durations
         vis.data.forEach(character => {
             character.timePeriods.forEach(period => {
                 let key = `S${period.seasonNum}E${period.episodeNum}`;
@@ -162,27 +161,28 @@ class Storyline{
             });
         });
 
-        vis.cumulativeDurations = {};
-        vis.totalDuration = 0;
-        // Custom sorting function for episode keys
-
-        Object.keys(vis.episodeDurations).sort((a, b) => {
+        // Sort keys and compute cumulative durations
+        let sortedKeys = Object.keys(vis.episodeDurations).sort((a, b) => {
             let seasonNumA = parseInt(a.match(/S(\d+)/)[1], 10);
             let episodeNumA = parseInt(a.match(/E(\d+)/)[1], 10);
             let seasonNumB = parseInt(b.match(/S(\d+)/)[1], 10);
             let episodeNumB = parseInt(b.match(/E(\d+)/)[1], 10);
-
             return seasonNumA - seasonNumB || episodeNumA - episodeNumB;
-        }).forEach(key => {
+        });
+
+        sortedKeys.forEach(key => {
             vis.cumulativeDurations[key] = vis.totalDuration;
             vis.totalDuration += vis.episodeDurations[key];
         });
 
-        // Remove the existing SVG and re-render the storyline
-        d3.select("#" + vis.parentElement).select("svg").remove();
-        // Re-render the storyline with the updated data
-        vis.renderStoryline();
+        // Update scales
+        vis.xScale.domain([0, vis.totalDuration]);
+        vis.yScale.domain(vis.data.map(d => d.characterName));
+
+        // Re-render the storyline
+        this.renderStoryline();
     }
+
 
     sec(timeString){
         var sec = 0;
