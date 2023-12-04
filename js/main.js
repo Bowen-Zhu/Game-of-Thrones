@@ -261,6 +261,15 @@ loadData().then(data => {
         let selectedGroup = this.value;
         relationshipMatrix.updateMatrixBasedOnGroup(selectedGroup);
     });
+    document.getElementById('matrixReset').addEventListener('click', function() {
+        relationshipNetwork.reloadSelectedNodes();
+        relationshipMatrix.updateMatrix([], true);
+        relationshipMatrix.resetMatrix();
+        storyline.update([]);
+        scatterplot.selectedCharacterNames = [];
+        scatterplot.highlight();
+        document.getElementById('groupSelect').value = 'All';
+    });
 
 }).catch(error => {
     console.error('Error processing data:', error.message);

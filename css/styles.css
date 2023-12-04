@@ -169,6 +169,12 @@ p {
     background-color: red;
     color: white;
 }
+select{
+    padding: 0.3%;
+    background-color: darkslategray;
+    border-radius: 5px;
+    color: lightyellow;
+}
 
 .toast-body{
     color: #0a0a0a;

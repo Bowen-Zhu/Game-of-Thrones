@@ -6,6 +6,8 @@ class RelationshipMatrix {
         this.characterNames = characterNames;
         this.originalCharacterNames = [...characterNames]; // Shallow copy
         this.data = data;
+        this.currentGroupFilter = 'All'; // Default group filter
+        this.currentCharacterFilter = []; // Default character filter
 
         console.log(data)
 
@@ -200,82 +202,78 @@ class RelationshipMatrix {
             .attr("transform", `translate(${vis.margin.top*5},0)`)
             .call(legendAxis);
     }
-    updateMatrix(selectedCharacterNames, isReset = false) {
-        let vis = this;
-
-        if (isReset) {
-            // Reset to the original state
-            this.characterNames = this.originalCharacterNames;
-            this.matrixData = this.originalMatrixData;
-        } else {
-            let selectedIndices = selectedCharacterNames.map(name => vis.characterNames.indexOf(name));
-            let filteredMatrix = selectedIndices.map(rowIndex => {
-                return selectedIndices.map(colIndex => vis.matrixData[rowIndex][colIndex]);
-            });
-
-            this.characterNames = selectedCharacterNames;
-            this.matrixData = filteredMatrix;
-        }
-
-        // Recalculate max screen time and re-render
-        this.maxScreenTime = this.calculateMaxScreenTime();
-        d3.select("#" + vis.parentElement).select("svg").remove();
-        this.renderMatrix();
-    }
     updateMatrixBasedOnGroup(groupName) {
-        let vis = this;
+        this.currentGroupFilter = groupName;
+        this.applyFilters();
+    }
 
-        // Reset to the full list of characters before applying the new filter
-        vis.characterNames = [...vis.originalCharacterNames];
+    updateMatrix(selectedCharacterNames) {
+        this.currentCharacterFilter = selectedCharacterNames;
+        this.applyFilters();
+    }
 
-        // Filter the characters based on the selected group
-        let groupCharacters = vis.data.filter(character => character.group === groupName)
+    applyFilters() {
+        if (this.currentGroupFilter !== 'All') {
+            this.filterMatrixBasedOnGroup();
+        } else if (this.currentCharacterFilter.length > 0) {
+            this.filterMatrixBasedOnCharacters();
+        } else {
+            this.resetMatrix();
+        }
+    }
+
+    filterMatrixBasedOnGroup() {
+        let groupCharacters = this.data.filter(character => character.group === this.currentGroupFilter)
             .map(character => character.characterName);
 
-        // reset matrix if all groups is selected
-        if (groupName === "All"){
-            this.resetMatrix();
-            return;
-        }
-
         if (groupCharacters.length === 0) {
-            // Show warning and reset matrix if group has no characters
-            alert(`No characters found in the '${groupName}' group. Resetting matrix to show all characters`);
-            this.resetMatrix();
+            if (this.currentCharacterFilter.length > 0) {
+                // If no characters in group but characters are selected in character filter, revert to character filter
+                alert(`No characters found in the '${this.currentGroupFilter}' group among the top 50 characters. Reverting to character filter.`);
+                document.getElementById('groupSelect').value = 'All';
+                this.filterMatrixBasedOnCharacters();
+            } else {
+                // If no characters in group and no characters selected in character filter, reset matrix
+                alert(`No characters found in the '${this.currentGroupFilter}' group among the top 50 characters. Resetting matrix to show all characters`);
+                document.getElementById('groupSelect').value = 'All';
+                this.resetMatrix();
+            }
             return;
         }
 
-        // Update characterNames with filtered data
-        vis.characterNames = vis.characterNames.filter(name => groupCharacters.includes(name));
+        this.characterNames = this.originalCharacterNames.filter(name => groupCharacters.includes(name));
+        this.updateFilteredMatrixData();
+        this.reRenderMatrix();
+    }
 
-        // Update matrixData with filtered data
-        vis.updateFilteredMatrixData();
 
-        // Re-render the matrix
-        d3.select("#" + vis.parentElement).select("svg").remove();
-        this.renderMatrix();
+    filterMatrixBasedOnCharacters() {
+        this.characterNames = this.originalCharacterNames.filter(name => this.currentCharacterFilter.includes(name));
+        this.updateFilteredMatrixData();
+        this.reRenderMatrix();
     }
 
     updateFilteredMatrixData() {
-        let vis = this;
-
-        // Get indices of filtered characters in the original matrix
-        let filteredIndices = vis.characterNames.map(name => vis.originalCharacterNames.indexOf(name));
-
-        // Update matrixData based on filtered indices
-        vis.matrixData = filteredIndices.map(rowIndex =>
-            filteredIndices.map(colIndex => vis.originalMatrixData[rowIndex][colIndex])
+        let filteredIndices = this.characterNames.map(name => this.originalCharacterNames.indexOf(name));
+        this.matrixData = filteredIndices.map(rowIndex =>
+            filteredIndices.map(colIndex => this.originalMatrixData[rowIndex][colIndex])
         );
     }
 
-    resetMatrix() {
-        // Reset to original data
-        this.characterNames = [...this.originalCharacterNames];
-        this.matrixData = this.originalMatrixData.map(row => row.slice());
-
-        // Re-render the matrix
+    reRenderMatrix() {
         d3.select("#" + this.parentElement).select("svg").remove();
         this.renderMatrix();
     }
+
+    resetMatrix() {
+        this.currentGroupFilter = 'All';
+        this.currentCharacterFilter = [];
+        this.characterNames = [...this.originalCharacterNames];
+        this.matrixData = this.originalMatrixData.map(row => row.slice());
+
+        this.reRenderMatrix();
+    }
+
+
 
 }

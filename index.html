@@ -130,12 +130,12 @@
 
     <section id="matrixContainer">
         <h3>Every moment spent together on screen adds a layer to the narrative</h3>
-        <p><em>(Hover to see the time each pair spends together on screen)</em></p>
+        <p><em>(Hover to see the time each pair spends together on screen. Filter data based on houses and reset previous filters to see all character data)</em></p>
 
         <!--Matrix goes here-->
         <div id="matrix">
             <select id="groupSelect">
-                <option value="All">All Houses</option>
+                <option value="All">All Selected Houses</option>
                 <option value="Stark">Stark</option>
                 <option value="Targaryen">Targaryen</option>
                 <option value="Baratheon">Baratheon</option>
@@ -151,6 +151,7 @@
                 <option value="White Walkers">White Walkers</option>
                 <option value="Include">Include</option>
             </select>
+            <button id="matrixReset" class="btn btn-primary">Reset Filter</button>
         </div>
         <div class="scroll-arrow"></div>
     </section>
