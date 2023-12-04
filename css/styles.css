@@ -182,9 +182,9 @@ p {
 }
 
 #matrix{
-    height: 100vh;
+    height: 90vh;
     width: 100vw;
-    margin-top: -60px;
+    margin-top: -15px;
 }
 
 #network{

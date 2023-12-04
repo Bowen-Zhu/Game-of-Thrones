@@ -1,13 +1,15 @@
 class RelationshipMatrix {
-    constructor(matrixData, parentElement, characterNames) {
+    constructor(matrixData, parentElement, characterNames, data) {
         this.matrixData = matrixData;
         this.originalMatrixData = matrixData.slice().map(row => row.slice()); // Deep copy
         this.parentElement = parentElement;
         this.characterNames = characterNames;
         this.originalCharacterNames = [...characterNames]; // Shallow copy
+        this.data = data;
+
+        console.log(data)
 
         this.maxScreenTime = this.calculateMaxScreenTime();
-
 
         //define tooltip
         this.tooltip = d3.select("body").append("div")
@@ -64,7 +66,7 @@ class RelationshipMatrix {
 
         vis.goldScale = d3.scaleLinear()
             .domain([0, this.maxScreenTime])
-            .range(["#FFF8DC", "#8B4513"])
+            .range(["#FFFFFF", "#8B4513"])
             .interpolate(d3.interpolateRgb);
 
         const cellSize = vis.yScale.bandwidth();
@@ -115,7 +117,7 @@ class RelationshipMatrix {
             .attr("width", cellSize)
             .attr("height", cellSize)
             .style("fill", d => {
-                return vis.characterNames[d.rowIndex] === vis.characterNames[d.colIndex] ? "#FFF8DC" : this.getTimeColor(d.cellValue);
+                return vis.characterNames[d.rowIndex] === vis.characterNames[d.colIndex] ? "#FFFFFF" : this.getTimeColor(d.cellValue);
             })
             .style("stroke", "#0a0a0a")
             .style("stroke-width", "2px")
@@ -220,7 +222,60 @@ class RelationshipMatrix {
         d3.select("#" + vis.parentElement).select("svg").remove();
         this.renderMatrix();
     }
+    updateMatrixBasedOnGroup(groupName) {
+        let vis = this;
 
+        // Reset to the full list of characters before applying the new filter
+        vis.characterNames = [...vis.originalCharacterNames];
 
+        // Filter the characters based on the selected group
+        let groupCharacters = vis.data.filter(character => character.group === groupName)
+            .map(character => character.characterName);
+
+        // reset matrix if all groups is selected
+        if (groupName === "All"){
+            this.resetMatrix();
+            return;
+        }
+
+        if (groupCharacters.length === 0) {
+            // Show warning and reset matrix if group has no characters
+            alert(`No characters found in the '${groupName}' group. Resetting matrix to show all characters`);
+            this.resetMatrix();
+            return;
+        }
+
+        // Update characterNames with filtered data
+        vis.characterNames = vis.characterNames.filter(name => groupCharacters.includes(name));
+
+        // Update matrixData with filtered data
+        vis.updateFilteredMatrixData();
+
+        // Re-render the matrix
+        d3.select("#" + vis.parentElement).select("svg").remove();
+        this.renderMatrix();
+    }
+
+    updateFilteredMatrixData() {
+        let vis = this;
+
+        // Get indices of filtered characters in the original matrix
+        let filteredIndices = vis.characterNames.map(name => vis.originalCharacterNames.indexOf(name));
+
+        // Update matrixData based on filtered indices
+        vis.matrixData = filteredIndices.map(rowIndex =>
+            filteredIndices.map(colIndex => vis.originalMatrixData[rowIndex][colIndex])
+        );
+    }
+
+    resetMatrix() {
+        // Reset to original data
+        this.characterNames = [...this.originalCharacterNames];
+        this.matrixData = this.originalMatrixData.map(row => row.slice());
+
+        // Re-render the matrix
+        d3.select("#" + this.parentElement).select("svg").remove();
+        this.renderMatrix();
+    }
 
 }

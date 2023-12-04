@@ -215,7 +215,7 @@ loadData().then(data => {
 
     const characterNames = processedData.map(character => character.characterName);
     const storyline = new Storyline("storyline", processedData);
-    const relationshipMatrix = new RelationshipMatrix(matrix, "matrix", characterNames);
+    const relationshipMatrix = new RelationshipMatrix(matrix, "matrix", characterNames, processedData);
     const relationshipNetwork = new RelationshipNetwork("network", processedData, matrix, groupedData);
 
     const scatterplot = new Scatterplot(processedDataFull, data.deathsData, data.battlesData);
@@ -242,6 +242,7 @@ loadData().then(data => {
     document.getElementById('reload-node').addEventListener('click', function() {
         relationshipNetwork.reloadSelectedNodes();
         relationshipMatrix.updateMatrix([], true);
+        relationshipMatrix.resetMatrix();
         storyline.update([]);
         scatterplot.selectedCharacterNames = [];
         scatterplot.highlight();
@@ -256,6 +257,11 @@ loadData().then(data => {
         scatterplot.drawBattles();
         scatterplot.highlight();
     });
+    document.getElementById('groupSelect').addEventListener('change', function() {
+        let selectedGroup = this.value;
+        relationshipMatrix.updateMatrixBasedOnGroup(selectedGroup);
+    });
+
 }).catch(error => {
     console.error('Error processing data:', error.message);
 });
