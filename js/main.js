@@ -263,7 +263,6 @@ loadData().then(data => {
     });
     document.getElementById('matrixReset').addEventListener('click', function() {
         relationshipNetwork.reloadSelectedNodes();
-        relationshipMatrix.updateMatrix([], true);
         relationshipMatrix.resetMatrix();
         storyline.update([]);
         scatterplot.selectedCharacterNames = [];

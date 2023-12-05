@@ -236,14 +236,12 @@ class RelationshipMatrix {
             .map(character => character.characterName);
 
         if (groupCharacters.length === 0) {
+            // If no characters in group and no characters selected in character filter, reset matrix
+            alert(`No characters found in the '${this.currentGroupFilter}' group among the top 50 characters. Resetting matrix to show all characters`);
             if (this.currentCharacterFilter.length > 0) {
-                // If no characters in group but characters are selected in character filter, revert to character filter
-                alert(`No characters found in the '${this.currentGroupFilter}' group among the top 50 characters. Reverting to character filter.`);
                 document.getElementById('groupSelect').value = 'All';
                 this.filterMatrixBasedOnCharacters();
             } else {
-                // If no characters in group and no characters selected in character filter, reset matrix
-                alert(`No characters found in the '${this.currentGroupFilter}' group among the top 50 characters. Resetting matrix to show all characters`);
                 document.getElementById('groupSelect').value = 'All';
                 this.resetMatrix();
             }
