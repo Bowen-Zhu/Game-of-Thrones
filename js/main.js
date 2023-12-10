@@ -99,18 +99,21 @@ function wrangleData(charactersData, episodesData, groupsData) {
     let characterGroupMap = {};
     groupsData.groups.forEach(group => {
         group.characters.forEach(characterName => {
+            // Check if the group name is 'Include' and change it to 'None'
+            let groupName = group.name === 'Include' ? 'None' : group.name;
+
             if (characterGroupMap[characterName]) {
                 // If the character is already in the map, it's a duplicate
                 console.warn(`Duplicate group entry found for character: ${characterName}`);
             } else {
-                characterGroupMap[characterName] = group.name;
+                characterGroupMap[characterName] = groupName;
             }
         });
     });
 
     // Add group info to characters (not exactly the houses)
     characters.forEach(character => {
-        charactersMap[character.characterName].group = characterGroupMap[character.characterName] || 'none';
+        charactersMap[character.characterName].group = characterGroupMap[character.characterName] || 'None';
     });
 
     // Convert the Map to an Array

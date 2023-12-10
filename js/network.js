@@ -227,7 +227,12 @@ class RelationshipNetwork {
     createLegend() {
         let vis = this;
 
-        vis.groups = Array.from(new Set(vis.nodes.map(node => node.group))).sort();
+        vis.groups = Array.from(new Set(vis.nodes.map(node => node.group)))
+                          .sort((a, b) => {
+                              if (a === "None") return 1; // Always place 'None' at the end
+                              if (b === "None") return -1; // Always place 'None' at the end
+                              return a.localeCompare(b); // Alphabetical sort for other groups
+                          });
 
         vis.legendRectSize = 15;
         vis.legendSpacing = 20;
