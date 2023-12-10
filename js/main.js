@@ -294,7 +294,6 @@ $(document).ready(function () {
         }
     });
     $('.animated-text').each(function(i) {
-        // Delay in milliseconds, adjust as needed
         var delay = 1500 * (i + 1);
         $(this).delay(delay).queue(function() {
             $(this).addClass('visible').dequeue();
