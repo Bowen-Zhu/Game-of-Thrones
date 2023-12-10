@@ -120,20 +120,26 @@
 
     <section id="matrixStory">
         <div class="row">
+            <h3>QUANTIFIED DEPTH OF RELATIONSHIPS</h3>
+            <h4>Todo: question?</h4>
             <div class="plot-text">
-                <h3>Quantified depth of relationships weaved through the GoT narratives</h3><hr>
                 <p>
                     Each intersection tells a story of time that's shared between characters, be it fleeting or extensive. It's a map of connections, charting the course of dialogues, battles, alliances, and silent understandings. As you delve into this grid, you'll discover not just who interacts with whom, but for how long – a measure that sometimes speaks louder than words or actions.<br><br>
                     This matrix is a window into the heart of 'Game of Thrones,' revealing the weight of each interaction in the grand scheme of the series. It allows you to see beyond the apparent, offering a unique perspective on how the duration and frequency of interactions contribute to the complex fabric of this epic tale. Here, every moment spent together on screen adds a layer to the narrative, crafting a story that is as much about time as it is about characters and events.
                 </p>
             </div>
+            <div class="action-text">
+                <p><em>
+                    Hover to see the time each pair spends together on screen.
+                    <br>Filter data based on houses and reset previous filters to see all character data.
+                </em></p>
+            </div>
         </div>
-        <p><em>(Hover to see the time each pair spends together on screen. Filter data based on houses and reset previous filters to see all character data)</em></p>
         <div class="scroll-arrow"></div>
     </section>
 
     <section id="matrixContainer">
-        <h3>Every moment spent together on screen adds a layer to the narrative</h3>
+        <h3>TODO: MAIN INSIGHT</h3>
         <!--Matrix goes here-->
         <div class="matrix-buttons">
             <select id="groupSelect" class="btn">
@@ -162,8 +168,9 @@
     </section>
     <section id="storylineStory">
         <div class="row">
+            <h3>ENTRANCE, EXITS & SHARED SCENES</h3>
+            <h4>Todo: question?</h4>
             <div class="plot-text">
-                <h3>Beats of Presence and Absence: Shaping GoT Narrative</h3><hr>
                 <p>
                     The storyline below illuminates the precise moments characters grace the screen, offering a visual narrative of their presence throughout the series. It's a timeline not just of appearances but of existences, where you can trace the arcs of characters, observe when they fade into the backdrop of Westeros, or when they command the forefront. <br><br>
 
@@ -171,13 +178,17 @@
                     This perspective also silently narrates the untold story: when certain characters make their final bow, leaving an indelible mark on the storyline.
                 </p>
             </div>
+            <div class="action-text">
+                <p><em>
+                    Hover to see the episode and season the character makes an appearance, and the duration of their screen time.
+                </em></p>
+            </div>
         </div>
-        <p><em>(Hover to see the episode and season the character makes an appearance, and the duration of their screen time)</em></p>
         <div class="scroll-arrow"></div>
     </section>
 
     <section id="storylineContainer">
-        <h3>The Rythm of Game of Thrones: Entrance, Exits and Shared Scenes</h3>
+        <h3>TODO: MAIN INSIGHT</h3>
         <div class="storyline-container">
             <div id="storyline"></div>
         </div>
@@ -186,8 +197,9 @@
     </section>
 
     <section id="scatterStory">
+        <h3>DATA ANALYSIS</h3>
+        <h4>What does it take to endure the ruthless game of thrones?</h4>
         <div class="plot-text">
-            <h3>What does it take to endure the ruthless Game of Thrones</h3><hr>
             <p>
                 In exploring relationships, an important relationship to consider is how the TV series relates to events in the book it is based on, "A Song of Ice and Fire". <br><br>
                 Does survival in the harsh world of Westeros depend more on martial prowess or on the ability to build alliances? Are those entangled in numerous battles more likely to meet an early end, or do their combative engagements bolster their chances of survival?<br><br>
@@ -195,12 +207,16 @@
                 You can explore how a character's longevity in the book relates to the number of battles they are involved or the number of relationships they have.
             </p>
         </div>
-        <p><em>(Click these buttons to explore how these factors respectively interact with the battles and relationships characters are involved in)</em></p>
+        <div class="action-text">
+            <p><em>
+                Click these buttons to explore how these factors respectively interact with the battles and relationships characters are involved in.
+            </em></p>
+        </div>
         <div class="scroll-arrow"></div>
     </section>
 
     <section id="scatterContainer">
-        <h3>Character survival relating to their relationships and battles</h3>
+        <h3>TODO: MAIN INSIGHT</h3>
         <div class="row">
             <div class="scatterplot-buttons">
                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
@@ -209,12 +225,10 @@
                     <input type="radio" class="btn-check" name="battles" id="button2" autocomplete="off">
                     <label class="btn" for="button2">Battles Involved</label>
                 </div>
+                <button type="button" class="btn" data-toggle="modal" data-target="#kingsuccess">King's Success Rate</button>
             </div>
             <div class="scatterplots-container">
                 <div id="scatterplot"></div>
-                <button type="button" class="btn" data-toggle="modal" data-target="#kingsuccess">
-                    View King's Success Rate
-                </button>
             </div>
 
             <!--scatter-plot goes here-->
