@@ -183,8 +183,8 @@ class RelationshipMatrix {
             .attr("stop-color", d => d.color);
 
         // Legend bar dimensions
-        const legendWidth = 300;
-        const legendHeight = 30;
+        const legendWidth = 200;
+        const legendHeight = 20;
 
         // Append the legend bar
         vis.svg.append("rect")
