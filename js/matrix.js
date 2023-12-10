@@ -68,7 +68,7 @@ class RelationshipMatrix {
 
         vis.goldScale = d3.scaleLinear()
             .domain([0, this.maxScreenTime])
-            .range(["#FFFFFF", "#8B4513"])
+            .range(["rgba(255, 255, 224, 0.1)", "rgba(255, 255, 224, 1)"])
             .interpolate(d3.interpolateRgb);
 
         const cellSize = vis.yScale.bandwidth();
@@ -119,7 +119,7 @@ class RelationshipMatrix {
             .attr("width", cellSize)
             .attr("height", cellSize)
             .style("fill", d => {
-                return vis.characterNames[d.rowIndex] === vis.characterNames[d.colIndex] ? "#FFFFFF" : this.getTimeColor(d.cellValue);
+                return vis.characterNames[d.rowIndex] === vis.characterNames[d.colIndex] ? "#000000" : this.getTimeColor(d.cellValue);
             })
             .style("stroke", "#0a0a0a")
             .style("stroke-width", "2px")

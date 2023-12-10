@@ -30,7 +30,9 @@ h1::after {
     padding-right: 0.5rem;
     padding-left: 0.5rem;
 }
-h3{
+
+h3 {
+    padding-top: 2rem;
     color: lightyellow;
     text-align: center;
 }
@@ -73,12 +75,22 @@ p {
 
 #networkContainer, #matrixContainer, #storylineContainer, #scatterContainer{
     padding-top: 60px;
-
 }
+
 #matrixStory, #storylineStory, #networkStory, #scatterStory, #introStory{
     padding: 60px 100px 0 100px;
-    margin:5%;
+    margin: 5%;
 }
+
+.intro-text {
+    padding: 5%;
+    border-radius: 5px;
+    color: gold;
+    margin-top: 60px;
+    font-size: 1rem;
+    text-align: left;
+}
+
 .plot-text {
     background-color: rgba(47, 79, 79, 0.6);
     padding: 5%;
@@ -88,6 +100,7 @@ p {
     font-size: 1rem;
     text-align: left;
 }
+
 .animated-text {
     opacity: 0;
     transform: translateY(20px);
@@ -161,7 +174,7 @@ p {
     }
 }
 
-.btn{
+.btn {
     background-color: darkslategray;
     color: lightyellow;
     border-radius: 5px;
@@ -180,14 +193,15 @@ p {
     background-color: red;
     color: white;
 }
-select{
+
+select {
     padding: 0.6%;
     background-color: darkslategray;
     border-radius: 5px;
     color: lightyellow;
 }
 
-.toast-body{
+.toast-body {
     color: #0a0a0a;
     text-align: left;
 }
@@ -195,13 +209,14 @@ select{
 #storyline {
     height: 90vh;
     width: 100vw;
-    margin-top: -40px;
+    margin-top: -1rem;
+    margin-left: 3%;
+    margin-right: 3%;
 }
 
 #matrix{
-    height: 90vh;
+    height: 85vh;
     width: 100vw;
-    margin-top: -15px;
 }
 
 #network{
@@ -209,6 +224,7 @@ select{
     width: 100vw;
     margin: 3%;
 }
+
 #scatterplot{
     height: 60vh;
     width: 70vw;

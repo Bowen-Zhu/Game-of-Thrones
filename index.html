@@ -59,12 +59,11 @@
     <section id="introStory">
         <div class="row">
             <!--Story about relationships goes here-->
-            <div class="plot-text">
+            <div class="intro-text">
                 <p>
                     Embark on a spellbinding odyssey through 'Game of Thrones: Bonds and Bloodshed,' where the pulsating heart of Westeros is unveiled in an extraordinary visualization of character interactions. Envision a living tapestry where each strand vibrantly represents one of the top 50 characters, handpicked for their indelible impact on the screen. This isn't just a static display; it's a dynamic narrative canvas, evolving episode by episode, season by season, artfully revealing the essence, alliances, and conflicts that intertwine these characters.<br><br>
                     <span class="animated-text">Delve into this immersive realm where the unseen becomes visible. We meticulously trace the intricate lattice of relationships amongst these pivotal characters, transcending beyond mere names and faces. Our visualization is a journey through shared destinies and moments, offering a profound insight into the nuanced interplay of their bonds. As you traverse this landscape, you will encounter the shifting tides of friendships and enmities, the complexities of love and betrayal, all woven into the rich tapestry that propels the epic saga of 'Game of Thrones.'<br><br></span>
                     <span class="animated-text">This experience is more than a revelation of connections; it's an exploration of narrative depth, a window into how relationships ebb and flow, shape destinies, and drive the overarching story. Step into this world, and witness the art of storytelling unfold in a way that’s as captivating as it is enlightening.</span>
-
                 </p>
             </div>
         </div>
@@ -73,40 +72,38 @@
 
     <section id="networkStory">
         <div class="row">
+            <h3>Beats of Presence and Absence: Shaping GoT Narrative</h3>
             <div class="plot-text">
-                <h3>Beats of Presence and Absence: Shaping GoT Narrative</h3><hr>
-                <!--Story about relationships goes here-->
                 <p>
                     The network of characters below forms the heart of the exploration of Game of Thrones. This network intricately maps key characters and their connections across all the Kingdoms. The Relationship Map is designed to bring the complex web of alliances, friendships, and rivalries to your fingertips. As you navigate through this visualization, you'll uncover the nuanced layers of interaction that define the saga's rich narrative tapestry.<br><br>
                     The relationship network is an interactive gateway to viewing information about the relationships and characters you are interested in.
-
                 </p>
             </div>
         </div>
+        <p><em>(Hover to see character relationships. Click on a character and press submit to filter the rest of the visualizations. Click reload to see all characters in subsequent visualizations)</em></p>
         <div class="scroll-arrow"></div>
     </section>
 
     <section id="networkContainer">
         <h3>Placeholder for network relationship hook</h3>
-        <p><em>(Hover to see character relationships. Click on a character and press submit to filter the rest of the visualizations. Click reload to see all characters in subsequent visualizations)</em></p>
         <!--Network visualization goes here-->
-        <div class="network-container">
-            <div class="network-buttons">
-                <button id="select-node" type="button" class="btn btn-primary">Submit</button>
-                <div class="toast-container position-fixed bottom-0 end-0 p-3">
-                    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
-                        <div class="toast-header">
-                            <strong class="me-auto">Warning</strong>
-                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                        </div>
-                        <div class="toast-body">
-                            Sorry, you have to submit at least four nodes.
-                            <br>Please reload to proceed.
-                        </div>
+        <div class="network-buttons">
+            <button id="select-node" type="button" class="btn btn-primary">Submit</button>
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
+                    <div class="toast-header">
+                        <strong class="me-auto">Warning</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Sorry, you have to submit at least four nodes.
+                        <br>Please reload to proceed.
                     </div>
                 </div>
-                <button id="reload-node" type="button" class="btn btn-primary">Reload</button>
             </div>
+            <button id="reload-node" type="button" class="btn btn-primary">Reload</button>
+        </div>
+        <div class="network-container">
             <div id="network"></div>
         </div>
         <div class="scroll-arrow"></div>
@@ -122,16 +119,15 @@
                 </p>
             </div>
         </div>
+        <p><em>(Hover to see the time each pair spends together on screen. Filter data based on houses and reset previous filters to see all character data)</em></p>
         <div class="scroll-arrow"></div>
     </section>
 
     <section id="matrixContainer">
         <h3>Every moment spent together on screen adds a layer to the narrative</h3>
-        <p><em>(Hover to see the time each pair spends together on screen. Filter data based on houses and reset previous filters to see all character data)</em></p>
-
         <!--Matrix goes here-->
-        <div id="matrix">
-            <select id="groupSelect">
+        <div class="matrix-buttons">
+            <select id="groupSelect" class="btn">
                 <option value="All">All Selected Houses</option>
                 <option value="Stark">Stark</option>
                 <option value="Targaryen">Targaryen</option>
@@ -150,6 +146,9 @@
             </select>
             <button id="matrixReset" class="btn btn-primary">Reset Filter</button>
         </div>
+        <div class="matrix-container">
+            <div id="matrix"></div>
+        </div>
         <div class="scroll-arrow"></div>
     </section>
     <section id="storylineStory">
@@ -161,17 +160,18 @@
 
                     As you explore this visualization, you'll notice patterns emerging – the intersections where characters share screen time, pivotal moments where paths cross, and most involved characters. It's a dance of shadows and light, revealing who walks alongside whom, and who walks alone. <br><br>
                     This perspective also silently narrates the untold story: when certain characters make their final bow, leaving an indelible mark on the storyline.
-
                 </p>
             </div>
         </div>
+        <p><em>(Hover to see the episode and season the character makes an appearance, and the duration of their screen time)</em></p>
         <div class="scroll-arrow"></div>
     </section>
 
     <section id="storylineContainer">
         <h3>The Rythm of Game of Thrones: Entrance, Exits and Shared Scenes</h3>
-        <p><em>(Hover to see the episode and season the character makes an appearance, and the duration of their screen time)</em></p>
-        <div id="storyline"></div>
+        <div class="storyline-container">
+            <div id="storyline"></div>
+        </div>
         <!--storyline goes here-->
         <div class="scroll-arrow"></div>
     </section>
@@ -186,18 +186,21 @@
                 You can explore how a character's longevity in the book relates to the number of battles they are involved or the number of relationships they have.
             </p>
         </div>
+        <p><em>(Click these buttons to explore how these factors respectively interact with the battles and relationships characters are involved in)</em></p>
         <div class="scroll-arrow"></div>
     </section>
 
     <section id="scatterContainer">
         <h3>Character survival relating to their relationships and battles</h3>
-        <p><em>(Click these buttons to explore how these factors respectively interact with the battles and relationships characters are involved in)</em></p>
         <div class="row">
             <div class="scatterplot-buttons">
-                <button id="button1" class="btn">relationships</button>
-                <button id="button2" class="btn">battles involved</button>
+                <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                    <input type="radio" class="btn-check" name="relationships" id="button1" autocomplete="off">
+                    <label class="btn" for="button1">Relationships</label>
+                    <input type="radio" class="btn-check" name="battles" id="button2" autocomplete="off">
+                    <label class="btn" for="button2">Battles Involved</label>
+                </div>
             </div>
-
             <div class="scatterplots-container">
                 <div id="scatterplot"></div>
                 <button type="button" class="btn" data-toggle="modal" data-target="#kingsuccess">
