@@ -9,7 +9,7 @@ class RelationshipMatrix {
         this.currentGroupFilter = 'All'; // Default group filter
         this.currentCharacterFilter = []; // Default character filter
 
-        console.log(data)
+        console.log(data);
 
         this.maxScreenTime = this.calculateMaxScreenTime();
 
