@@ -82,7 +82,6 @@ p {
 #intro{
     padding-top:60px;
     height: 100vh;
-    background-image: url("/images/back4.png");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -158,8 +157,8 @@ p {
     left: 50%;
     transform: translateX(-50%);
     cursor: pointer;
-    width: 20px;
-    height: 20px;
+    width: 10px;
+    height: 10px;
 }
 
 .scroll-arrow::before,
@@ -173,14 +172,14 @@ p {
 }
 
 .scroll-arrow::before {
-    left: -10px;
+    left: -5px;
     width: 100%;
     height: 100%;
     transform: skewY(-140deg);
 }
 
 .scroll-arrow::after {
-    right: -10px;
+    right: -5px;
     width: 100%;
     height: 100%;
     transform: skewY(140deg);
