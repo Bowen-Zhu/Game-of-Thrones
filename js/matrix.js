@@ -29,14 +29,19 @@ class RelationshipMatrix {
         let maxTime = 0;
         this.matrixData.forEach((row, rowIndex) => {
             row.forEach((cellValue, colIndex) => {
-                // Check if the rowIndex and colIndex are not the same to exclude self-relations
-                if (rowIndex !== colIndex && cellValue > maxTime) {
-                    maxTime = cellValue;
+                // Check if both rowIndex and colIndex characters are in the currentCharacterFilter (if it's not empty)
+                if (this.currentCharacterFilter.length === 0 ||
+                    (this.currentCharacterFilter.includes(this.characterNames[rowIndex]) &&
+                        this.currentCharacterFilter.includes(this.characterNames[colIndex]))) {
+                    if (rowIndex !== colIndex && cellValue > maxTime) {
+                        maxTime = cellValue;
+                    }
                 }
             });
         });
         return maxTime;
     }
+
 
 
     renderMatrix() {
@@ -130,7 +135,7 @@ class RelationshipMatrix {
                     .style("opacity", .9);
 
                 let screenTimeText = d.rowIndex === d.colIndex ?
-                    " " : `Screen Time Together: <b>${d.cellValue} seconds</b>`;
+                    `Character Screen Time: <b>${d.cellValue} seconds</b>` : `Screen Time Together: <b>${d.cellValue} seconds</b>`;
 
                 vis.tooltip.html(`Relationship between <b>${vis.characterNames[d.rowIndex]} & ${vis.characterNames[d.colIndex]}</b><br/>${screenTimeText}`)
                     .style("left", event.pageX + "px")
@@ -269,6 +274,8 @@ class RelationshipMatrix {
 
     reRenderMatrix() {
         d3.select("#" + this.parentElement).select("svg").remove();
+        this.maxScreenTime = this.calculateMaxScreenTime();
+        this.createLegend(this.maxScreenTime);
         this.renderMatrix();
     }
 
@@ -277,6 +284,7 @@ class RelationshipMatrix {
         this.currentCharacterFilter = [];
         this.characterNames = [...this.originalCharacterNames];
         this.matrixData = this.originalMatrixData.map(row => row.slice());
+        this.maxScreenTime = this.calculateMaxScreenTime();
 
         this.reRenderMatrix();
     }
