@@ -299,4 +299,7 @@ $(document).ready(function () {
             $(this).addClass('visible').dequeue();
         });
     });
+    $('.dropdown-menu>li>a').on('click', function(){
+        $('.navbar-collapse').collapse('hide');
+    });
 });
