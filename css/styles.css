@@ -87,6 +87,7 @@ p {
     border-radius: 5px;
     color: gold;
     margin-top: 60px;
+    margin-bottom: 60px;
     font-size: 1rem;
     text-align: left;
 }
@@ -97,8 +98,13 @@ p {
     border-radius: 5px;
     color: lightyellow;
     margin-top: 60px;
+    margin-bottom: 60px;
     font-size: 1rem;
     text-align: left;
+}
+
+.action-text {
+
 }
 
 .animated-text {
