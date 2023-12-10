@@ -3,7 +3,7 @@ class Scatterplot {
         this.processedDataFull = processedDataFull;
         this.deathsData = deathsData;
         this.battlesData = battlesData;
-        this.currentPlotType = 'Links';  // 'Links' or 'Battles'
+        this.currentPlotType = 'Relationships';  // 'Relationships' or 'Battles'
         // Initialize clicked tooltip state
         this.clickedTooltipData = null;
         // Store the highlighted dots
@@ -260,7 +260,7 @@ class Scatterplot {
     }
 
     drawRelationships() {
-        this.currentPlotType = 'Links';
+        this.currentPlotType = 'Relationships';
         this.data = this.prepareDataLinks();
         this.x = d3.scaleLinear()
             .domain([0, d3.max(this.data, d => d.count)]) // Domain based on link count
