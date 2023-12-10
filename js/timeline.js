@@ -90,8 +90,9 @@ class Storyline{
 
         vis.data.forEach(character => {
             //bind the timePeriod data
+
             let rects = vis.svg.selectAll(".scene-rect-" + character.characterName)
-                .data(character.timePeriods, d => d.sceneStart + "-" + d.sceneEnd);
+                .data(character.timePeriods, d => `S${d.seasonNum}E${d.episodeNum}_${d.sceneStart}_${d.sceneEnd}`);
 
             // Create rectangles
             rects.enter()
@@ -132,13 +133,11 @@ class Storyline{
         vis.data = selectedCharacterNames.length > 0
             ? vis.fullData.filter(character => selectedCharacterNames.includes(character.characterName))
             : vis.fullData;
-        // If no specific characters are selected, use the full dataset
-        let filteredData = selectedCharacterNames.length > 0
-            ? vis.data.filter(character => selectedCharacterNames.includes(character.characterName))
-            : vis.data;
 
-        // Update the data
-        vis.data = filteredData;
+        // Reinitialize state variables
+        vis.episodeDurations = {};
+        vis.cumulativeDurations = {};
+        vis.totalDuration = 0;
 
         d3.select("#" + vis.parentElement).select("svg").remove();
 
@@ -147,11 +146,6 @@ class Storyline{
     }
     wrangleData() {
         let vis = this;
-
-        // Reset episode durations and cumulative durations
-        vis.episodeDurations = {};
-        vis.cumulativeDurations = {};
-        vis.totalDuration = 0;
 
         // Compute episode durations
         vis.data.forEach(character => {
@@ -162,13 +156,10 @@ class Storyline{
             });
         });
 
-        // Sort keys and compute cumulative durations
         let sortedKeys = Object.keys(vis.episodeDurations).sort((a, b) => {
-            let seasonNumA = parseInt(a.match(/S(\d+)/)[1], 10);
-            let episodeNumA = parseInt(a.match(/E(\d+)/)[1], 10);
-            let seasonNumB = parseInt(b.match(/S(\d+)/)[1], 10);
-            let episodeNumB = parseInt(b.match(/E(\d+)/)[1], 10);
-            return seasonNumA - seasonNumB || episodeNumA - episodeNumB;
+            let [seasonA, episodeA] = a.substring(1).split('E').map(Number);
+            let [seasonB, episodeB] = b.substring(1).split('E').map(Number);
+            return seasonA - seasonB || episodeA - episodeB;
         });
 
         sortedKeys.forEach(key => {
