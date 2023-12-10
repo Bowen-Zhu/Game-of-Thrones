@@ -222,7 +222,7 @@ select {
 }
 
 #storyline {
-    height: 90vh;
+    height: 80vh;
     width: 100vw;
     margin-top: -1rem;
     margin-left: 3%;
@@ -230,8 +230,9 @@ select {
 }
 
 #matrix{
-    height: 85vh;
+    height: 80vh;
     width: 100vw;
+    margin-left: 25%;
 }
 
 #network{

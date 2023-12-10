@@ -191,7 +191,7 @@ class RelationshipMatrix {
             .attr("width", legendWidth)
             .attr("height", legendHeight)
             .style("fill", "url(#gradient)")
-            .attr("transform", `translate(${vis.margin.left*5},0)`);
+            .attr("transform", `translate(${vis.margin.left*3.2},0)`);
 
         // Define a scale and axis for the legend
         let legendScale = d3.scaleLinear()
@@ -204,13 +204,13 @@ class RelationshipMatrix {
         // Append the legend axis
         vis.svg.append("g")
             .attr("class", "legend-axis")
-            .attr("transform", `translate(${vis.margin.left*5},0)`)
+            .attr("transform", `translate(${vis.margin.left*3.2},0)`)
             .call(legendAxis);
 
         // Add a title for the legend
         vis.svg.append("text")
             .attr("class", "legend-title")
-            .attr("x", vis.margin.left*5)
+            .attr("x", vis.margin.left*3.2)
             .attr("y", -30)
             .text("Shared Screen Time (seconds)")
             .style("font-size", "15px")
