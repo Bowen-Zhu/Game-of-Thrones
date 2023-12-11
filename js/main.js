@@ -230,7 +230,6 @@ loadData().then(data => {
     const scatterplot = new Scatterplot(processedDataFull, data.deathsData, data.battlesData);
     scatterplot.drawRelationships();
     const barchart = new Barchart("popUp-Barchart", data.battlesData);
-    barchart.createChart();
 
     document.addEventListener("nodeSelected", function(event) {
         let selectedNodes = event.detail;

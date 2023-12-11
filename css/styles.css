@@ -36,6 +36,9 @@ h3 {
     color: lightyellow;
     text-align: center;
 }
+.type{
+    color: gold;
+}
 
 #main-title {
     background-color: rgba(47,79,79, 0.7);
@@ -257,9 +260,14 @@ select {
     transform: translateX(20%);
     margin: 2%;
 }
+#kingsuccess .modal-dialog {
+    max-width: 90%;
+    width: auto;
+}
 
-.modal-body{
-    width: 900px;
+
+#popUp-Barchart{
+    width: 60vw;
 }
 
 .matrix-tooltip, .storyline-tooltip, .network-tooltip,  .scatter-tooltip{
@@ -338,7 +346,7 @@ select {
     .vertical-scroll section {
         height: auto;
         padding-bottom: 0.5em;
-        overflow-x: scroll;
+
     }
     h1, h3 {
         font-size: 2em;
@@ -354,9 +362,13 @@ select {
     #storyline, #matrix, #scatterplot, #network {
         margin: 1rem;
         transform: translateX(0);
+        overflow-x: scroll;
     }
     .scroll-arrow{
         display: none;
+    }
+    #kingsuccess .modal-dialog {
+        max-width: 100%;
     }
 }
 
@@ -372,6 +384,10 @@ select {
     }
     .navbar {
         height: auto;
+    }
+    #kingsuccess .modal-dialog {
+        max-width: 100%;
+        overflow-x: scroll;
     }
 }
 

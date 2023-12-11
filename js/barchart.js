@@ -4,6 +4,17 @@ class Barchart {
         this.battlesData = battlesData;
         this.kingsData = this.processData();
         this.kingsArray = this.convertToArray(this.kingsData);
+
+
+        $('#kingsuccess').on('shown.bs.modal', function() {
+            let newWidth = document.getElementById(this.parentElement).getBoundingClientRect().width;
+            if (newWidth > 0) {
+                this.createChart(newWidth);
+            } else {
+                console.error("Invalid width for chart container.");
+            }
+        }.bind(this));
+
     }
 
     convertToArray(kingsData) {
@@ -49,13 +60,23 @@ class Barchart {
     }
 
     // Method to create the bar chart (to be implemented later)
-    createChart() {
+    createChart(newWidth) {
+        const vis = this;
         const margin = {top: 20, right: 30, bottom: 40, left: 140};
-        const width = 960 - margin.left - margin.right;
+        const width = newWidth - margin.left - margin.right;
         const height = 500 - margin.top - margin.bottom;
 
+        // Remove any existing SVG to avoid duplicates
+        d3.select("#" + vis.parentElement).select("svg").remove();
+
+        // Check if width is valid
+        if (width <= 0) {
+            console.error("Invalid width for chart container.");
+            return;
+        }
+
         // Append SVG Object to the body
-        const svg = d3.select("#" + this.parentElement).append("svg")
+        const svg = d3.select("#" + vis.parentElement).append("svg")
             .attr("class", "bar-chart-svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
