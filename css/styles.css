@@ -1,4 +1,3 @@
-
 html {
     scroll-snap-type: y mandatory;
     overflow-x: hidden;
@@ -19,7 +18,7 @@ h1 {
     text-shadow: 1px 1px 1px #000,
     0 0 0.5em darkslategray,
     0 0 0.1em darkslategray;
-    font-size: 3rem;
+    font-size: 3em;
     color: gold;
 }
 
@@ -46,7 +45,7 @@ h3 {
 }
 
 p {
-    font-size: 1.2rem;
+    font-size: 1.2em;
 }
 
 .navbar {
@@ -99,22 +98,22 @@ p {
 
 
 .intro-text {
-    padding: 5%;
+    padding: 0.3125em;
     border-radius: 5px;
     color: gold;
-    margin-top: 60px;
-    margin-bottom: 60px;
+    margin-top: 3.75em;
+    margin-bottom: 3.75em;;
     font-size: 1rem;
     text-align: left;
 }
 
 .plot-text {
     background-color: rgba(47, 79, 79, 0.6);
-    padding: 5%;
+    padding: 3em;
     border-radius: 5px;
     color: lightyellow;
-    margin-top: 60px;
-    margin-bottom: 60px;
+    margin-top: 3.75em;
+    margin-bottom: 3.75em;
     font-size: 1rem;
     text-align: left;
 }
@@ -334,13 +333,47 @@ select {
 .modal{
     color: darkslategray;
 }
-footer {
-    margin: 0;
-    padding: 0.5em;
-    width: 100%;
-    background-color: darkslategray;
-    color: lightyellow;
-    text-align: center;
+
+@media only screen and (max-width: 1300px) {
+    .vertical-scroll section {
+        height: auto;
+        padding-bottom: 0.5em;
+        overflow-x: scroll;
+    }
+    h1, h3 {
+        font-size: 2em;
+    }
+    p{
+        font-size: 1em;
+    }
+    .btn, .scroll-arrow, .modal-body {
+    }
+    .plot-text, .intro-text {
+        padding: 0.3em;
+    }
+    #storyline, #matrix, #scatterplot, #network {
+        margin: 1rem;
+        transform: translateX(0);
+    }
+    .scroll-arrow{
+        display: none;
+    }
 }
+
+@media only screen and (max-width: 480px) {
+    .plot-text, .intro-text {
+        padding: 0.2em;
+    }
+    h1, h3 {
+        font-size: 1em;
+    }
+    p{
+        font-size: 0.7em;
+    }
+    .navbar {
+        height: auto;
+    }
+}
+
 
 

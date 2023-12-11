@@ -236,7 +236,6 @@ loadData().then(data => {
         let selectedNodes = event.detail;
         console.log('Submitted Nodes in main.js:', selectedNodes);
 
-        // TODO: PASS VARIABLE TO OTHER FILES
         let selectedCharacterNames = selectedNodes.map(node => node.characterName);
         storyline.update(selectedCharacterNames);
         relationshipMatrix.updateMatrix(selectedCharacterNames);
