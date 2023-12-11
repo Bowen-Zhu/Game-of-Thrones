@@ -132,7 +132,8 @@ class Scatterplot {
             .attr("cx", 0)
             .attr("cy", 13)
             .style("fill", "gold")
-            .style("stroke", "white");
+            .style("stroke", "white")
+            .style("stroke-width", 2);
 
         // Add red dot for dead characters
         legend.append("circle")
@@ -140,7 +141,8 @@ class Scatterplot {
             .attr("cx", 0)
             .attr("cy", 33)
             .style("fill", "#ff774b")
-            .style("stroke", "white");
+            .style("stroke", "white")
+            .style("stroke-width", 2);
 
         // Add stacked dots for selected characters
         legend.append("circle")
@@ -148,14 +150,16 @@ class Scatterplot {
             .attr("cx", 0)
             .attr("cy", 53)
             .style("fill", "gold")
-            .style("stroke", "coral");
+            .style("stroke", "coral")
+            .style("stroke-width", 2);
 
         legend.append("circle")
             .attr("r", 6)
             .attr("cx", 0)
             .attr("cy", 63)
             .style("fill", "#ff774b")
-            .style("stroke", "coral");
+            .style("stroke", "coral")
+            .style("stroke-width", 2);
 
         // Add legend text
         const legendText = legend.append("text")
