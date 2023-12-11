@@ -97,6 +97,7 @@ p {
     margin: 5%;
 }
 
+
 .intro-text {
     padding: 5%;
     border-radius: 5px;
@@ -148,6 +149,9 @@ p {
     scroll-snap-align: start;
     text-align: center;
     position: relative;
+}
+#overallStory{
+    height: 85vh;
 }
 
 /* Add scroll down nudge arrow */
@@ -229,7 +233,7 @@ select {
 }
 
 #storyline {
-    height: 90vh;
+    height: 85vh;
     width: 100vw;
     margin-top: -1rem;
     margin-left: 3%;
@@ -237,9 +241,9 @@ select {
 }
 
 #matrix{
-    height: 80vh;
+    height: 85vh;
     width: 100vw;
-    margin-left: 25%;
+    transform: translateX(25%)
 }
 
 #network{
@@ -330,6 +334,13 @@ select {
 .modal{
     color: darkslategray;
 }
-
+footer {
+    margin: 0;
+    padding: 0.5em;
+    width: 100%;
+    background-color: darkslategray;
+    color: lightyellow;
+    text-align: center;
+}
 
 
