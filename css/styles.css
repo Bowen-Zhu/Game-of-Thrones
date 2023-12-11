@@ -314,8 +314,8 @@ select {
 }
 
 .dot-highlighted {
-    fill: pink;
-    stroke: #fff;
+    /*fill: pink;*/
+    stroke: orange;
     stroke-width: 1px;
 }
 

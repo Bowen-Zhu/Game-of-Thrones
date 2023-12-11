@@ -46,7 +46,7 @@ class Scatterplot {
             .range([0, this.width]);
 
         this.y = d3.scaleLinear()
-            .domain([1, d3.max(this.data, d => d.survivedChapters + 40)]) // Domain based on survivedChapters
+            .domain([1, d3.max(this.data, d => d.survivedChapters + 57)]) // Domain based on survivedChapters
             .range([this.height, 0]);
 
         // Add X and Y axis
@@ -118,20 +118,44 @@ class Scatterplot {
 
         // Add a legend box
         legend.append("rect")
-            .attr("x", -3)
+            .attr("x", -15)
             .attr("y", -3)
-            .attr("width", 110)
-            .attr("height", 45)
+            .attr("width", 140)
+            .attr("height", 80)
             .style("fill", "black")
             .style("stroke", "gold")    // Border for the legend box
             .style("stroke-width", "1px");
 
-        // Add pink dot
+        // Add gold dot for survived characters
         legend.append("circle")
-            .attr("class", "dot-highlighted")
             .attr("r", 6)
-            .attr("cx", 8)
-            .attr("cy", 18);
+            .attr("cx", 0)
+            .attr("cy", 13)
+            .style("fill", "gold")
+            .style("stroke", "white");
+
+        // Add red dot for dead characters
+        legend.append("circle")
+            .attr("r", 6)
+            .attr("cx", 0)
+            .attr("cy", 33)
+            .style("fill", "#ff774b")
+            .style("stroke", "white");
+
+        // Add stacked dots for selected characters
+        legend.append("circle")
+            .attr("r", 6)
+            .attr("cx", 0)
+            .attr("cy", 53)
+            .style("fill", "gold")
+            .style("stroke", "coral");
+
+        legend.append("circle")
+            .attr("r", 6)
+            .attr("cx", 0)
+            .attr("cy", 63)
+            .style("fill", "#ff774b")
+            .style("stroke", "coral");
 
         // Add legend text
         const legendText = legend.append("text")
@@ -140,16 +164,29 @@ class Scatterplot {
             .style("font-size", "14px")
             .style("fill", "gold");
 
-        // First line of text
+        // Text for survived characters
         legendText.append("tspan")
-            .attr("x", 20)
+            .attr("x", 10)
             .attr("dy", "1.2em")
+            .text("Survived Characters");
+
+        // Text for dead characters
+        legendText.append("tspan")
+            .attr("x", 10)
+            .attr("dy", "1.6em")
+            .text("Dead Characters");
+
+        // Text for selected characters
+        legendText.append("tspan")
+            .attr("x", 10)
+            .attr("dy", "1.6em")
+            .style("font-size", "13px")
             .text("The Characters");
 
-        // Second line of text
         legendText.append("tspan")
-            .attr("x", 20)
-            .attr("dy", "1.2em")
+            .attr("x", 10)
+            .attr("dy", "0.8em")
+            .style("font-size", "13px")
             .text("You Selected");
     }
 
@@ -204,9 +241,18 @@ class Scatterplot {
 
         let dataset = [];
         this.deathsData.forEach(death => {
-            if (death['Book of Death'] && death['Death Chapter'] && this.characterMap.has(death.Name)) {
+            if (this.characterMap.has(death.Name)) {
                 const characterIndex = this.processedDataFull.findIndex(d => d.characterName === death.Name);
                 const linkCount = linkCountArr[characterIndex];
+
+                // Check if both or neither death details are provided
+                const isDead = death['Book of Death'] && death['Death Chapter'];
+                const isAlive = !death['Book of Death'] && !death['Death Chapter'];
+
+                // Throw error if data is incomplete
+                if (!isDead && !isAlive) {
+                    console.warn(`Incomplete death data for character: ${death.Name}`);
+                }
 
                 // const bookScaledChapter = death['Book of Death'] + death['Death Chapter'] / this.chaptersPerBook;
                 // Handle cases where 'Book of Intro' is empty
@@ -217,8 +263,15 @@ class Scatterplot {
 
                 const introBook = death['Book of Intro'];
                 let introChapter = death['Book Intro Chapter'];
-                const deathBook = death['Book of Death'];
-                let deathChapter = death['Death Chapter'];
+
+                let deathBook, deathChapter;
+                if (isDead) {
+                    deathBook = death['Book of Death'];
+                    deathChapter = death['Death Chapter'];
+                } else {     // Last book and chapter for characters who are not dead
+                    deathBook = 5;
+                    deathChapter = this.totalChapters[deathBook - 1];
+                }
 
                 // Validate the chapter numbers
                 if (introChapter > this.totalChapters[introBook - 1]) {
@@ -251,7 +304,8 @@ class Scatterplot {
                     bookOfDeath: deathBook,
                     deathChapter: deathChapter,
                     introBook: introBook,
-                    introChapter: introChapter
+                    introChapter: introChapter,
+                    isDead: isDead
                 });
             }
         });
@@ -286,7 +340,11 @@ class Scatterplot {
                 const characterIndex = this.processedDataFull.findIndex(d => d.characterName === character.characterName);
                 const death = this.deathsData.find(d => d.Name === character.characterName);
 
-                if (death && death['Book of Death'] && death['Death Chapter']) {
+                if (death) {
+                    // Check if both or neither death details are provided
+                    const isDead = death['Book of Death'] && death['Death Chapter'];
+                    const isAlive = !death['Book of Death'] && !death['Death Chapter'];
+
                     // const bookScaledChapter = death['Book of Death'] + death['Death Chapter'] / this.chaptersPerBook;
                     // Handle cases where 'Book of Intro' is empty
                     if (!death['Book of Intro']) {
@@ -296,8 +354,15 @@ class Scatterplot {
 
                     const introBook = death['Book of Intro'];
                     let introChapter = death['Book Intro Chapter'];
-                    const deathBook = death['Book of Death'];
-                    let deathChapter = death['Death Chapter'];
+
+                    let deathBook, deathChapter;
+                    if (isDead) {
+                        deathBook = death['Book of Death'];
+                        deathChapter = death['Death Chapter'];
+                    } else {     // Last book and chapter for characters who are not dead
+                        deathBook = 5;
+                        deathChapter = this.totalChapters[deathBook - 1];
+                    }
 
                     // Validate the chapter numbers
                     if (introChapter > this.totalChapters[introBook - 1]) {
@@ -330,7 +395,8 @@ class Scatterplot {
                         bookOfDeath: deathBook,
                         deathChapter: deathChapter,
                         introBook: introBook,
-                        introChapter: introChapter
+                        introChapter: introChapter,
+                        isDead: isDead
                     });
                 }
             }
@@ -368,7 +434,7 @@ class Scatterplot {
             .duration(200)
             .style("opacity", .9);
         // this.tooltip.html(`Character: ${d.name}<br>${this.currentPlotType}: ${d.count}<br>Death: Book ${d.bookOfDeath}, Chapter ${d.deathChapter}`)
-        this.tooltip.html(`Character: ${d.name}<br>${this.currentPlotType}: ${d.count}<br>Intro: Book ${d.introBook}, Chapter ${d.introChapter}<br>Death: Book ${d.bookOfDeath || 'N/A'}, Chapter ${d.deathChapter || 'N/A'}<br>Survived Chapters: ${d.survivedChapters}`)
+        this.tooltip.html(`Character: ${d.name}<br>${this.currentPlotType}: ${d.count}<br>Intro: Book ${d.introBook}, Chapter ${d.introChapter}<br>Death: ${d.isDead ? `Book ${d.bookOfDeath}, Chapter ${d.deathChapter}` : 'N/A'}<br>Survived Chapters: ${d.survivedChapters}`)
             .style("left", (event.pageX + 15) + "px") // +15 to prevent the tooltip from blocking the dot itself
             .style("top", (event.pageY - 28) + "px");
     }
@@ -428,7 +494,9 @@ class Scatterplot {
             .attr("class", "dot")
             .attr("cx", d => this.x(d.count))
             .attr("cy", d => this.y(d.survivedChapters))
-            .attr("r", 5);
+            .attr("r", 5)
+            .style("fill", d => d.isDead ? "#ff774b" : "gold") // #ff774b (between red and coral) for dead characters
+            .style("stroke-width", 2);
 
         this.svg.selectAll(".dot")
             .on("mouseover", this.mouseover)
