@@ -121,10 +121,6 @@ p {
     text-align: left;
 }
 
-.action-text {
-
-}
-
 .animated-text {
     opacity: 0;
     transform: translateY(20px);
@@ -353,8 +349,6 @@ select {
     }
     p{
         font-size: 1em;
-    }
-    .btn, .scroll-arrow, .modal-body {
     }
     .plot-text, .intro-text {
         padding: 0.3em;
