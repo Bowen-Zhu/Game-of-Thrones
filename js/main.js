@@ -206,6 +206,12 @@ let processedData;
 let matrix;
 let groupedData;
 let groupedMatrix;
+const relationshipInsight = document.getElementById('relationshipInsight');
+const battlesInsight = document.getElementById('battlesInsight');
+
+// Set the default visibility
+relationshipInsight.style.display = 'block';
+battlesInsight.style.display = 'none';
 
 loadData().then(data => {
     processedDataFull = wrangleData(data.charactersData, data.episodesData, data.groupsData);
@@ -254,11 +260,15 @@ loadData().then(data => {
     document.getElementById('button1').addEventListener('click', function() {
         scatterplot.drawRelationships();
         scatterplot.highlight();
+        relationshipInsight.style.display = 'block';
+        battlesInsight.style.display = 'none';
     });
 
     document.getElementById('button2').addEventListener('click', function() {
         scatterplot.drawBattles();
         scatterplot.highlight();
+        relationshipInsight.style.display = 'none';
+        battlesInsight.style.display = 'block';
     });
     document.getElementById('groupSelect').addEventListener('change', function() {
         let selectedGroup = this.value;
