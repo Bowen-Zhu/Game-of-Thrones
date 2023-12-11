@@ -92,7 +92,7 @@ p {
     padding-top: 60px;
 }
 
-#matrixStory, #storylineStory, #networkStory, #scatterStory, #introStory{
+#matrixStory, #storylineStory, #networkStory, #scatterStory, #introStory, #overallStory {
     padding: 60px 100px 0 100px;
     margin: 5%;
 }
