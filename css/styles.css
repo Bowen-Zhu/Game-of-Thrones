@@ -259,6 +259,7 @@ select {
 #kingsuccess .modal-dialog {
     max-width: 90%;
     width: auto;
+    padding: 1em;
 }
 
 
