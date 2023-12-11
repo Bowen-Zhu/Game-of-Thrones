@@ -1,8 +1,4 @@
 # Bonds and Bloodshed
-* Alphania Muthee
-* Bowen Zhu
-* Jinming Li
-
 Our visualization project [*Bonds and Bloodshed in the world of Game of Thrones*](https://github.com/Bowen-Zhu/Game-of-Thrones) explores the interpersonal relationships among the top 50 characters with the highest screen time in the book and its television adaptation, revealing how instrumental the number, depth, and type of connections are in helping individuals survive in a world characterized by political realism.
 
 See Video for introduction.  
